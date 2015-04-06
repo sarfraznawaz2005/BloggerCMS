@@ -1,0 +1,26 @@
+<article>
+    <h3><a href="{{settings.url}}/post/{{slug}}.html">{{title}}</a></h3>
+    <span class="glyphicon glyphicon-time"></span> {{dated}}
+
+    {{#showbody}}
+        <hr>
+        <p class="post-content">{{{body}}}</p>
+        <br/>
+
+        <div class="post-info">
+            {{#category}}
+                <span class="glyphicon glyphicon-folder-open"></span> &nbsp;
+                <a class="lowercase" href="{{settings.url}}/category/{{category}}.html">{{category}}</a>
+                &nbsp;&nbsp;
+            {{/category}}
+
+            <span class="glyphicon glyphicon-bookmark"></span>
+
+            {{#tags}}
+                <a class="lowercase" href="{{settings.url}}/tag/{{.}}.html">{{.}}</a>&nbsp;&nbsp;
+            {{/tags}}
+        </div>
+
+    {{/showbody}}
+    <hr>
+</article>

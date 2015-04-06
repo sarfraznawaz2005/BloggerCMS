@@ -1,0 +1,19 @@
+{{> head}}
+<body>
+{{> nav}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 main-content">
+            {{#homePosts}}
+                {{> article}}
+            {{/homePosts}}
+
+            <a class="btn btn-primary" href="posts.html">&rarr; View All Posts</a>
+        </div>
+
+        {{> sidebar}}
+    </div>
+</div>
+
+{{> footer}}

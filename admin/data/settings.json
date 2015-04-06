@@ -1,0 +1,11 @@
+{
+	"url": "https:\/\/codeinphp.github.io",
+	"title": "Code In PHP",
+	"tagline": "PHP and more...",
+	"author": "Sarfraz Ahmed",
+	"number_posts": "10",
+	"layout": "default",
+	"theme": "bootstrap.min.css",
+	"disqus": "codeinphp",
+	"only_titles": ""
+}

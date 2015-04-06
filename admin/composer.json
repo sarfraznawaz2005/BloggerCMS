@@ -1,0 +1,11 @@
+{
+  "require": {
+    "slim/slim": "2.*",
+    "mustache/mustache": "~2.5",
+    "erusev/parsedown": "dev-master",
+    "camspiers/json-pretty": "1.0.*"
+  },
+  "autoload": {
+    "classmap": ["app/classes"]
+  }
+}

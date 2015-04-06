@@ -1,0 +1,80 @@
+{{> head}}
+<body>
+{{> nav}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 main-content">
+            <article>
+                <h3>{{post.title}}</h3>
+                <span class="glyphicon glyphicon-time"></span> {{post.dated}}
+                <hr>
+
+                <p class="post-content">{{{post.body}}}</p>
+                <br/><br/>
+
+                <div class="post-info">
+                    {{#post.category}}
+                        <span class="glyphicon glyphicon-folder-open"></span> &nbsp;
+                        <a class="lowercase" href="{{settings.url}}/category/{{post.category}}.html">{{post.category}}</a>
+                        &nbsp;&nbsp;
+                    {{/post.category}}
+
+                    <span class="glyphicon glyphicon-bookmark"></span>
+
+                    {{#post.tags}}
+                        <a class="lowercase" href="{{settings.url}}/tag/{{.}}.html">{{.}}</a>&nbsp;&nbsp;
+                    {{/post.tags}}
+                </div>
+
+            </article>
+
+            <hr/>
+            <span class='st_facebook_large' displayText='Facebook'></span>
+            <span class='st_twitter_large' displayText='Tweet'></span>
+            <span class='st_pocket_large' displayText='Pocket'></span>
+            <span class='st_flipboard_large' displayText='Flipboard'></span>
+            <span class='st_googleplus_large' displayText='Google +'></span>
+            <span class='st_linkedin_large' displayText='LinkedIn'></span>
+            <span class='st_email_large' displayText='Email'></span>
+            <br/><br/>
+
+            <!-- Comment form -->
+            <div class="well">
+                <div id="disqus_thread"></div>
+                <script type="text/javascript">
+                    var disqus_shortname = '{{settings.disqus}}'; // required: replace example with your forum shortname
+                    /* * * DON'T EDIT BELOW THIS LINE * * */
+                    (function () {
+                        var dsq = document.createElement('script');
+                        dsq.type = 'text/javascript';
+                        dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">Comments
+                    powered by Disqus.</a></noscript>
+                <a href="http://disqus.com" class="dsq-brlink">Comments powered by
+                    <span class="logo-disqus">Disqus</span></a>
+            </div>
+
+        </div>
+
+        {{> sidebar}}
+
+    </div>
+</div>
+
+<!-- for sharethis -->
+<script type="text/javascript">var switchTo5x = true;</script>
+<script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({
+    publisher: "18a13a28-cab8-4bb2-9a13-25708fa3cd9b",
+    doNotHash: false,
+    doNotCopy: false,
+    hashAddressBar: false
+});
+</script>
+
+{{> footer}}

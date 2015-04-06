@@ -1,0 +1,21 @@
+{{> head}}
+<body>
+{{> nav}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 main-content">
+            <h1>Monthly Posts</h1>
+            <hr/>
+            <br/>
+
+            {{#archivePosts}}
+                {{> article}}
+            {{/archivePosts}}
+        </div>
+
+        {{> sidebar}}
+    </div>
+</div>
+
+{{> footer}}

@@ -1,0 +1,93 @@
+<div class="sidebar col-md-4">
+
+    <!-- Follow Panel -->
+{{#follow}}
+        <div class="panel panel-primary text-center">
+            <div class="panel-heading">
+                <strong>Follow Me</strong>
+            </div>
+
+            <div class="panel-body">
+                <a target="_blank" href="{{settings.url}}/rss.xml" class="btn btn-social-icon btn-outline"><i class="fa fa-rss"></i></a>
+
+                {{#twitter}}
+                    <a target="_blank" href="{{.}}" class="btn btn-social-icon btn-twitter"><i class="fa fa-twitter"></i></a>
+                {{/twitter}}
+                {{#linkedin}}
+                    <a target="_blank" href="{{.}}" class="btn btn-social-icon btn-linkedin"><i class="fa fa-linkedin"></i></a>
+                {{/linkedin}}
+                {{#github}}
+                    <a target="_blank" href="{{.}}" class="btn btn-social-icon btn-github"><i class="fa fa-github"></i></a>
+                {{/github}}
+                {{#google}}
+                    <a target="_blank" href="{{.}}" class="btn btn-social-icon btn-google-plus"><i class="fa fa-google-plus"></i></a>
+                {{/google}}
+                {{#facebook}}
+                    <a target="_blank" href="{{.}}" class="btn btn-social-icon btn-facebook"><i class="fa fa-facebook"></i></a>
+                {{/facebook}}
+            </div>
+        </div>
+{{/follow}}
+
+    <!-- Custom Values from Settings page -->
+{{#customValues}}
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <strong>{{title}}</strong>
+            </div>
+            {{{value}}}
+        </div>
+{{/customValues}}
+
+    <!-- Latest Posts -->
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <strong>Latest Posts</strong>
+        </div>
+
+        <ul class="list-group">
+            {{#latestPosts}}
+                <li class="list-group-item"><a href="{{settings.url}}/post/{{slug}}.html">{{title}}</a></li>
+            {{/latestPosts}}
+        </ul>
+    </div>
+
+    <!-- Categories -->
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <strong>Categories</strong>
+        </div>
+
+        <ul class="list-group">
+            {{#categories}}
+                <li class="list-group-item"><a class="lowercase" href="{{settings.url}}/category/{{.}}.html">{{.}}</a></li>
+            {{/categories}}
+        </ul>
+    </div>
+
+    <!-- Archives -->
+{{#archives}}
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <strong>Archives</strong>
+            </div>
+
+            {{{.}}}
+        </div>
+{{/archives}}
+
+    <!-- Tags -->
+{{#tagsCloud}}
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <strong>Tags Cloud</strong>
+            </div>
+
+            <div class="panel-body">
+                <ul class="list-inline">
+                    {{{.}}}
+                </ul>
+            </div>
+        </div>
+    </div>
+{{/tagsCloud}}
