@@ -24,9 +24,59 @@ BloggerCMS comes with fully responsive blog template based on famous [Twitter Bo
  - **Social Follow Section**
  - **Categories Section**
  - **Archives Section**
- 
 
+## Demo and Documentation ##
+[BloggerCMS Blog][6]
 
+## Requirements ##
+
+ - PHP 5.3 or above
+ - Enabled [mod_rewrite][7] module
+
+## Installation ##
+
+tobe updated
+
+## Getting Started ##
+
+[See Getting Started guide.][8]
+
+## Contribute ##
+
+Please feel free to fork and modify/extend BloggerCMS and send a pull request with your changes! To establish a consistent code quality, please check your code using [PHP_CodeSniffer][9]. If you find any bug, error or issue, please report it at [issue tracker][10].
+
+## Thanks ##
+
+Thanks to these open source projects that are used in BloggerCMS:
+
+ 1. [json-pretty][11] for formatting json in human readable format
+ 2. [parsedown][12], an awesome Markdown parser for PHP
+ 3. [mustache][13], excellent template engine used to create layouts for the blog
+ 4. [slim framework][14], nice and fast php framework
+
+## License ##
+
+The MIT License (MIT)
+
+Copyright (c) 2015 Sarfraz Ahmed  and [Contributors][15]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 
   [1]: http://en.wikipedia.org/wiki/Markdown
@@ -34,3 +84,13 @@ BloggerCMS comes with fully responsive blog template based on famous [Twitter Bo
   [3]: http://www.dropboxwiki.com/tips-and-tricks/host-websites-with-dropbox
   [4]: http://getbootstrap.com/
   [5]: https://mustache.github.io/
+  [6]: https://codeinphp.github.io/bloggercms-demo/
+  [7]: http://httpd.apache.org/docs/current/mod/mod_rewrite.html
+  [8]: https://codeinphp.github.io/bloggercms-demo/post/getting-started-with-bloggercms.html
+  [9]: https://github.com/squizlabs/PHP_CodeSniffer
+  [10]: https://github.com/sarfraznawaz2005/BloggerCMS/issues
+  [11]: https://github.com/camspiers/json-pretty
+  [12]: http://parsedown.org/
+  [13]: https://mustache.github.io/
+  [14]: http://www.slimframework.com/
+  [15]: https://github.com/sarfraznawaz2005/BloggerCMS/graphs/contributors
