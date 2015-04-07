@@ -6,6 +6,9 @@
 
 <title><?php echo $title;?></title>
 
+<link rel="shortcut icon" href="/favicon.ico"/>
+<link rel="shortcut icon" href="<?php echo $root; ?>/favicon.ico"/>
+
 <link href="<?php echo $root; ?>/app/css/bootstrap.min.css" rel="stylesheet">
 <link href="<?php echo $root; ?>/app/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
 <link href="<?php echo $root; ?>/app/css/sb-admin-2.css" rel="stylesheet">
