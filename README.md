@@ -84,9 +84,9 @@ SOFTWARE.
   [3]: http://www.dropboxwiki.com/tips-and-tricks/host-websites-with-dropbox
   [4]: http://getbootstrap.com/
   [5]: https://mustache.github.io/
-  [6]: https://codeinphp.github.io/bloggercms-demo/
+  [6]: https://bloggercms.github.io
   [7]: http://httpd.apache.org/docs/current/mod/mod_rewrite.html
-  [8]: https://codeinphp.github.io/bloggercms-demo/post/getting-started-with-bloggercms.html
+  [8]: https://bloggercms.github.io/page/get-started.html
   [9]: https://github.com/squizlabs/PHP_CodeSniffer
   [10]: https://github.com/sarfraznawaz2005/BloggerCMS/issues
   [11]: https://github.com/camspiers/json-pretty
