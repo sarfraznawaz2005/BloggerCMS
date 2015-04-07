@@ -1,0 +1,1 @@
+This folder will contain all data of your blog and later replciate it to public/data folder when you generate the blog.
