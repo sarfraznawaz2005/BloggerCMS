@@ -43,7 +43,7 @@ BloggerCMS comes with fully responsive blog template based on famous [Twitter Bo
  1. Download BloggerCMS either by clonning it's repository or [direct download][9].
  2. Move the files to your web root folder usually named **www** or **htdocs**
  3. Visit the BloggerCMS url. If you have installed it locally, it's url will be like **http://localhost/BloggerCMS** assuming folder name is **BloggerCMS**
- 4. Go to Settings page via left sidebar option or visiting by **http://localhost/BloggerCMS/admin/get_settings**. On Settings page, specify the required **Blog URL** field like **http://localhost/BloggerCMS** without ending backslash
+ 4. Go to Settings page via left sidebar option or visiting by **http://localhost/BloggerCMS/admin/get_settings**. On Settings page, specify the required **Blog URL** field like **http://localhost/BloggerCMS/public** without ending backslash
  5. Now you can add categories, posts and pages
  6. Finally click on the big green button **Generate Blog** on top right to generate your blog. It will be generated in **public** folder of BloggerCMS folder. You can then visit it at **http://localhost/BloggerCMS/public**. The **public** folder is what you need to upload to your web hosting provider or any other service to see your blog live on the internet.
 
