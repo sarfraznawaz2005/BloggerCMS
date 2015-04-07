@@ -6,7 +6,7 @@ $(function () {
 
     ////////////// EDIT BELOW FOUR VARS ///////////////
     // blog url without ending slash
-    var blogURL = 'https://codeinphp.github.io';
+    var blogURL = 'https://bloggercms.github.io';
     // class/id/selector of search keyword textbox
     var $searchKeywordSelector = $('.searchQuery');
     // class/id/selector of search button
