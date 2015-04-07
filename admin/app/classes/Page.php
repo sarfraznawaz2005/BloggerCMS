@@ -67,7 +67,7 @@ class Page
             $data[$id][$key] = $value;
         }
 
-        $post['slug'] = getSlugName($post['title']);
+        $data[$id]['slug'] = getSlugName($post['title']);
 
         MetaDataWriter::writeData($this->metaFile, $data);
 
