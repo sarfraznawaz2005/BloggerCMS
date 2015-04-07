@@ -76,6 +76,9 @@ a.confirm-delete2:hover {
     margin-top: -20px;
 }
 
+footer p {
+  padding-top:10px;
+}
 .navbar-top-links li:last-child {
     margin-right: 15px;
 }
