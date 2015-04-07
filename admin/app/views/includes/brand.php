@@ -6,5 +6,5 @@
         <span class="icon-bar"></span>
     </button>
 
-    <a class="navbar-brand" href="<?php echo $root;?>/"><i class="fa fa-pencil"></i> <?php echo Slim\Slim::getInstance()->getName();?></a>
+    <a class="navbar-brand" href="<?php echo $root;?>/"><i class="fa fa-edit"></i> <?php echo Slim\Slim::getInstance()->getName();?></a>
 </div>

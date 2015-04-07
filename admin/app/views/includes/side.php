@@ -5,7 +5,7 @@
                 <a class="active" href="<?php echo $root; ?>/"><i class="fa fa-dashboard"></i> Dashboard</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-edit"></i> Posts<span class="fa arrow"></span></a>
+                <a href="#"><i class="fa fa-pencil"></i> Posts<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
                         <a href="<?php echo $root; ?>/get_addpost">Add Post</a>
