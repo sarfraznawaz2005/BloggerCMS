@@ -254,6 +254,10 @@ class Post
 
         array_multisort($dates, SORT_DESC, SORT_NUMERIC, $data);
 
+        // remove post from disk
+        $postPath = '../public/post/' . getSlugName($data[$id]['title']) . '.html';
+        @unlink($postPath);
+
         unset($data[$id]);
 
         MetaDataWriter::writeData($this->metaFile, $data);

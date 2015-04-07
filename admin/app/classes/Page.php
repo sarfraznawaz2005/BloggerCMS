@@ -84,6 +84,11 @@ class Page
         $id = $params['param'];
 
         $data = MetaDataWriter::getFileData($this->metaFile);
+
+        // remove page from disk
+        $pagePath = '../public/page/' . getSlugName($data[$id]['title']) . '.html';
+        @unlink($pagePath);
+
         unset($data[$id]);
 
         MetaDataWriter::writeData($this->metaFile, $data);
