@@ -3,6 +3,9 @@
  */
 
 $(function () {
+    // enable syntax highlighting
+    hljs.initHighlightingOnLoad();
+    
     // lowercase link hrefs
     $('a.lowercase').each(function () {
         this.href = this.href.toLowerCase();
