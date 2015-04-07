@@ -37,6 +37,9 @@ class Generate
 
         // first copy all contents of template to public folder
         $this->copy_directory($layoutDir, $this->publicDir);
+        
+        // delete mustache particals folders from public folder
+        $this->rrmdir($this->publicDir . 'partials/');
 
         // delete tpl from public dir
         $tplFiles = glob($this->publicDir . '/*.mustache');
@@ -492,5 +495,18 @@ SITEMAP;
 
         file_put_contents($this->publicDir . 'sitemap.xml', $sitemap) or die('error writing sitemap file!');
     }
+    
+    function rrmdir($dir) { 
+       if (is_dir($dir)) { 
+         $objects = scandir($dir); 
+         foreach ($objects as $object) { 
+           if ($object != "." && $object != "..") { 
+             if (filetype($dir."/".$object) == "dir") rrmdir($dir."/".$object); else unlink($dir."/".$object); 
+           } 
+         } 
+         reset($objects); 
+         rmdir($dir); 
+       } 
+    }     
 
 }
