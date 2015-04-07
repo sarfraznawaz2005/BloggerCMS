@@ -35,30 +35,42 @@ BloggerCMS comes with fully responsive blog template based on famous [Twitter Bo
 
 ## Installation ##
 
-tobe updated
+> **Note:** You can run BloggerCMS on your web host or on your local PC; in both cases you can create your blog and upload it where you want.
+> In either case we expect you have PHP available and also mod_rewrite
+> module activated. If you want to run BloggerCMS on your local computer,
+> you can go for [XAMPP][8].
+
+ 1. Download BloggerCMS either by clonning it's repository or [direct download][9].
+ 2. Move the files to your web root folder usually named **www** or **htdocs**
+ 3. Visit the BloggerCMS url. If you have installed it locally, it's url will be like **http://localhost/BloggerCMS** assuming folder name is **BloggerCMS**
+ 4. Go to Settings page via left sidebar option or visiting by **http://localhost/BloggerCMS/admin/get_settings**. On Settings page, specify the required **Blog URL** field like **http://localhost/BloggerCMS** without ending backslash
+ 5. Now you can add categories, posts and pages
+ 6. Finally click on the big green button **Generate Blog** on top right to generate your blog. It will be generated in **public** folder of BloggerCMS folder. You can then visit it at **http://localhost/BloggerCMS/public**. The **public** folder is what you need to upload to your web hosting provider or any other service to see your blog live on the internet.
+
+See [Official BloggerCMS Blog][10] to learn more about it and its tutorials.
 
 ## Getting Started ##
 
-[See Getting Started guide.][8]
+[See Getting Started guide.][11]
 
 ## Contribute ##
 
-Please feel free to fork and modify/extend BloggerCMS and send a pull request with your changes! To establish a consistent code quality, please check your code using [PHP_CodeSniffer][9]. If you find any bug, error or issue, please report it at [issue tracker][10].
+Please feel free to fork and modify/extend BloggerCMS and send a pull request with your changes! To establish a consistent code quality, please check your code using [PHP_CodeSniffer][12]. If you find any bug, error or issue, please report it at [issue tracker][13].
 
 ## Thanks ##
 
 Thanks to these open source projects that are used in BloggerCMS:
 
- 1. [json-pretty][11] for formatting json in human readable format
- 2. [parsedown][12], an awesome Markdown parser for PHP
- 3. [mustache][13], excellent template engine used to create layouts for the blog
- 4. [slim framework][14], nice and fast php framework
+ 1. [json-pretty][14] for formatting json in human readable format
+ 2. [parsedown][15], an awesome Markdown parser for PHP
+ 3. [mustache][16], excellent template engine used to create layouts for the blog
+ 4. [slim framework][17], nice and fast php framework
 
 ## License ##
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Sarfraz Ahmed  and [Contributors][15]
+Copyright (c) 2015 Sarfraz Ahmed  and [Contributors][18]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -86,11 +98,14 @@ SOFTWARE.
   [5]: https://mustache.github.io/
   [6]: https://bloggercms.github.io
   [7]: http://httpd.apache.org/docs/current/mod/mod_rewrite.html
-  [8]: https://bloggercms.github.io/page/get-started.html
-  [9]: https://github.com/squizlabs/PHP_CodeSniffer
-  [10]: https://github.com/sarfraznawaz2005/BloggerCMS/issues
-  [11]: https://github.com/camspiers/json-pretty
-  [12]: http://parsedown.org/
-  [13]: https://mustache.github.io/
-  [14]: http://www.slimframework.com/
-  [15]: https://github.com/sarfraznawaz2005/BloggerCMS/graphs/contributors
+  [8]: http://en.wikipedia.org/wiki/XAMPP
+  [9]: https://github.com/sarfraznawaz2005/BloggerCMS/archive/master.zip
+  [10]: https://bloggercms.github.io
+  [11]: https://bloggercms.github.io/page/get-started.html
+  [12]: https://github.com/squizlabs/PHP_CodeSniffer
+  [13]: https://github.com/sarfraznawaz2005/BloggerCMS/issues
+  [14]: https://github.com/camspiers/json-pretty
+  [15]: http://parsedown.org/
+  [16]: https://mustache.github.io/
+  [17]: http://www.slimframework.com/
+  [18]: https://github.com/sarfraznawaz2005/BloggerCMS/graphs/contributors
