@@ -82,7 +82,7 @@ class Image implements Crud
         $app->redirect($_SERVER['HTTP_REFERER']);
     }
 
-    public function getTotalTagsCount()
+    public function getTotalImagesCount()
     {
         $data = MetaDataWriter::getFileData($this->metaFile);
         return count($data);

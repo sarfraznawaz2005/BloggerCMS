@@ -12,6 +12,7 @@ $app->get(
        $page = new Page();
        $category = new Category();
        $tag = new Tag();
+       $image = new Image();
 
        $data['totalPosts'] = $post->getTotalPostsCount();
        $data['totalPostsPublished'] = $post->getTotalPostsCountPublished();
@@ -19,6 +20,20 @@ $app->get(
        $data['totalPages'] = $page->getTotalPagesCount();
        $data['totalCategories'] = $category->getTotalCategoriesCount();
        $data['totalTags'] = $tag->getTotalTagsCount();
+       $data['totalImages'] = $image->getTotalImagesCount();
+
+       // latest posts/updates from offical BloggerCMS blog
+       $feedUrl = 'https://bloggercms.github.io/rss.xml';
+       $feeds = file_get_contents($feedUrl);
+       $xml = new SimpleXmlElement($feeds);
+
+       $articles = array();
+       foreach ($xml->channel->item as $item) {
+           $item = (array) $item;
+           $articles[] = array('title' => $item['title'], 'link' => $item['link']);
+       }
+
+       $data['articles'] = array_slice($articles, 0, 7);
 
        $app->render('index.php', array('title' => 'Dashboard', 'data' => $data));
    }
