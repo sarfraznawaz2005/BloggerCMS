@@ -25,11 +25,12 @@
                 </button>
             </div>
 
-            {{#pages}}
-                <ul class="nav navbar-nav page-links">
+            <ul class="nav navbar-nav page-links">
+                {{#pages}}
                     <li><a href="{{settings.url}}/page/{{slug}}.html">{{title}}</a></li>
-                </ul>
-            {{/pages}}
+                {{/pages}}
+            </ul>
+            
         </nav>
     </div>
 </header>
