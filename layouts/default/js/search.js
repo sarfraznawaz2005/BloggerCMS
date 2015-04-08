@@ -5,8 +5,6 @@
 $(function () {
 
     ////////////// EDIT BELOW FOUR VARS ///////////////
-    // blog url without ending slash
-    var blogURL = 'https://bloggercms.github.io';
     // class/id/selector of search keyword textbox
     var $searchKeywordSelector = $('.searchQuery');
     // class/id/selector of search button
@@ -27,7 +25,7 @@ $(function () {
         }
 
         $.ajax({
-            url: blogURL + "/data/blog.json",
+            url: __blogURL + "/data/blog.json",
             type: "GET",
             dataType: "json",
             success: function (data) {
