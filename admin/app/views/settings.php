@@ -119,7 +119,7 @@
                                             </option>
                                         </select>
 
-                                        <p class="help-block">The theme to be used for blog.</p>
+                                        <p class="help-block">The theme to be used for blog. Only applicable for default theme.</p>
                                     </div>
                                 </div>
 
