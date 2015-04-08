@@ -133,6 +133,13 @@
                                 </div>
 
                                 <div class="row">
+                                    <div class="form-group col-lg-4">
+                                        <label for="analytics">Google Analytics Tracking ID</label>
+                                        <input type="text" id="analytics" name="analytics" class="form-control" value="<?php echo $data['analytics']; ?>">
+                                    </div>
+                                </div>
+
+                                <div class="row">
                                     <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Update
                                     </button>
                                 </div>
