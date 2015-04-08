@@ -19,6 +19,7 @@ BloggerCMS comes with fully responsive blog template based on famous [Twitter Bo
  - **Responsive Layout** - get started easily with the included responsive layout
  - **RSS Support**
  - **Sitemap Support**
+ - **Google Analytics**
  - **Code Highlight Support**
  - **Tags Cloud Support**
  - **Social Follow Section**
