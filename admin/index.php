@@ -32,10 +32,13 @@ $app->setName($config['appname']); // later in view for example: $app->getName()
 $app->hook(
    'slim.before.router',
    function () use ($app, $config) {
+       $setting = new Setting();
+
        $app->view()->setData('app', $app); // we can now use $app in views
        $app->view()->setData('root', dirname($_SERVER['SCRIPT_NAME']));
        $app->view()->setData('layoutsDir', dirname(dirname(__FILE__)) . '\\layouts\\');
        $app->view()->setData('dateFormat', $config['dateFormat']);
+       $app->view()->setData('blogURL', $setting->getBlogURL());
    }
 );
 

@@ -73,6 +73,12 @@ class Setting implements Crud
         $app->flash('info', 'Deleted Successfully');
         $app->redirect($_SERVER['HTTP_REFERER']);
     }
+    
+    public function getBlogURL()
+    {
+        $data = MetaDataWriter::getFileData($this->metaFile);
+        return $data['url'];
+    }    
 
     public function add()
     {
