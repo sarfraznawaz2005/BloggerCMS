@@ -4,7 +4,7 @@
 
 $(function () {
 
-    ////////////// EDIT BELOW FOUR VARS ///////////////
+    ////////////// EDIT BELOW THREE VARS ///////////////
     // class/id/selector of search keyword textbox
     var $searchKeywordSelector = $('.searchQuery');
     // class/id/selector of search button

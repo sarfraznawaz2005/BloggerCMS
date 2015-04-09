@@ -7,6 +7,8 @@
 $app->get(
    '/',
    function () use ($app) {
+   
+        set_time_limit(0);
 
        $post = new Post();
        $page = new Page();
