@@ -434,7 +434,7 @@ class Generate
         foreach ($data['posts'] as $post) {
             $rssfeed .= '<item>' . $newline;
             $rssfeed .= '<title>' . $post['title'] . '</title>' . $newline;
-            $rssfeed .= '<description>' . $post['body'] . '</description>' . $newline;
+            $rssfeed .= '<description><![CDATA[' . $post['body'] . ']]></description>' . $newline;
             $rssfeed .= '<link>' . $data['settings']['url'] . '/post/' . getSlugName(
                   $post['title']
                ) . '.html</link>' . $newline;

@@ -23,17 +23,21 @@ $app->get(
        $data['totalImages'] = $image->getTotalImagesCount();
 
        // latest posts/updates from offical BloggerCMS blog
-       $feedUrl = 'https://bloggercms.github.io/rss.xml';
-       $feeds = file_get_contents($feedUrl);
-       $xml = new SimpleXmlElement($feeds);
+       try {
+           $feedUrl = 'https://bloggercms.github.io/rss.xml';
+           $feeds = file_get_contents($feedUrl);
+           $xml = new SimpleXmlElement($feeds);
 
-       $articles = array();
-       foreach ($xml->channel->item as $item) {
-           $item = (array) $item;
-           $articles[] = array('title' => $item['title'], 'link' => $item['link']);
+           $articles = array();
+           foreach ($xml->channel->item as $item) {
+               $item = (array) $item;
+               $articles[] = array('title' => $item['title'], 'link' => $item['link']);
+           }
+
+           $data['articles'] = array_slice($articles, 0, 7);
+       } catch (Exception $e) {
+
        }
-
-       $data['articles'] = array_slice($articles, 0, 7);
 
        $app->render('index.php', array('title' => 'Dashboard', 'data' => $data));
    }
