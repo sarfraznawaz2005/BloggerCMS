@@ -11,14 +11,14 @@
 
             <div class="text-center clearfix">
                 <div class="col-sm-4 col-md-4">
-                    <a class="prevpost btn btn-primary"><i class="fa fa-chevron-circle-left"></i> Prev Post</a>
+                    &nbsp;
                 </div>
                 <div class="col-sm-4 col-md-4">
                     <a class="btn btn-primary" href="{{settings.url}}/posts.html"><i class="fa fa-pencil"></i> View All
                         Post</a>
                 </div>
                 <div class="col-sm-4 col-md-4">
-                    &nbsp;
+                    <a class="nextpost btn btn-primary"><i class="fa fa-chevron-circle-right"></i> Next Post</a>
                 </div>
             </div>
 
@@ -36,7 +36,7 @@
 
         ///////////////////////////////////////////////////
         // class/id/selector of prev link
-        var $prevPostSelector = $('.prevpost');
+        var $nextPostSelector = $('.nextpost');
         ///////////////////////////////////////////////////
 
         $.ajax({
@@ -45,19 +45,19 @@
             dataType: "json",
             success: function (data) {
                 if (data.posts !== undefined && data.posts !== null) {
-                    var prevPost = data.posts[1];
+                    var nextPost = data.posts[1];
 
-                    if (prevPost === undefined || prevPost === null) {
+                    if (nextPost === undefined || nextPost === null) {
                         // hide previous link if blog has only one post
-                        $prevPostSelector.hide();
+                        $nextPostSelector.hide();
                     }
                     else {
-                        $prevPostSelector.attr('href', __blogURL + '/post/' + prevPost.slug + '.html');
+                        $nextPostSelector.attr('href', __blogURL + '/post/' + nextPost.slug + '.html');
                     }
                 }
             },
             error: function (e) {
-                $prevPostSelector.hide();
+                $nextPostSelector.hide();
             }
         });
 
