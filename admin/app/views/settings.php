@@ -36,7 +36,8 @@
                                         <label for="url">Blog URL</label>
                                         <input required type="text" id="url" name="url" class="form-control" value="<?php echo $data['url']; ?>">
 
-                                        <p class="help-block">This will be used for linking. Example: http://www.myblog.com</p>
+                                        <p class="help-block">This will be used for linking. Example:
+                                            http://www.myblog.com</p>
                                     </div>
                                 </div>
 
@@ -67,6 +68,7 @@
                                     </div>
                                 </div>
 
+                                <!--
                                 <div class="row">
                                     <div class="form-group col-lg-4">
                                         <label for="number_posts">Number of Posts</label>
@@ -75,6 +77,7 @@
                                         <p class="help-block">Number of blog posts to show on homepage.</p>
                                     </div>
                                 </div>
+                                -->
 
                                 <div class="row">
                                     <div class="form-group col-lg-4">
@@ -119,7 +122,8 @@
                                             </option>
                                         </select>
 
-                                        <p class="help-block">The theme to be used for blog. Only applicable for default theme.</p>
+                                        <p class="help-block">The theme to be used for blog. Only applicable for default
+                                            theme.</p>
                                     </div>
                                 </div>
 

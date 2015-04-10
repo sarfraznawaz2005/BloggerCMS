@@ -169,8 +169,8 @@ class Generate
         $data['latestPosts'] = array_slice($data['posts'], 0, 10);
 
         // total posts to show on homepage
-        $countHomePosts = $data['settings']['number_posts'] ?: 10;
-        $data['homePosts'] = array_slice($data['posts'], 0, $countHomePosts);
+        //$countHomePosts = $data['settings']['number_posts'] ?: 10;
+        $data['homePosts'] = array_slice($data['posts'], 0, 1);
 
         // generate tags cloud
         $tagsCloud = '';

@@ -9,7 +9,19 @@
                 {{> article}}
             {{/homePosts}}
 
-            <a class="btn btn-primary" href="posts.html">&rarr; View All Posts</a>
+            <div class="text-center clearfix">
+                <div class="col-sm-4 col-md-4">
+                    <a class="prevpost btn btn-primary"><i class="fa fa-chevron-circle-left"></i> Prev Post</a>
+                </div>
+                <div class="col-sm-4 col-md-4">
+                    <a class="btn btn-primary" href="{{settings.url}}/posts.html"><i class="fa fa-pencil"></i> View All
+                        Post</a>
+                </div>
+                <div class="col-sm-4 col-md-4">
+                    &nbsp;
+                </div>
+            </div>
+
         </div>
 
         {{> sidebar}}
@@ -17,3 +29,37 @@
 </div>
 
 {{> footer}}
+
+<!-- for pagination -->
+<script>
+    $(function () {
+
+        ///////////////////////////////////////////////////
+        // class/id/selector of prev link
+        var $prevPostSelector = $('.prevpost');
+        ///////////////////////////////////////////////////
+
+        $.ajax({
+            url: __blogURL + "/data/blog.json",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                if (data.posts !== undefined && data.posts !== null) {
+                    var prevPost = data.posts[1];
+
+                    if (prevPost === undefined || prevPost === null) {
+                        // hide previous link if blog has only one post
+                        $prevPostSelector.hide();
+                    }
+                    else {
+                        $prevPostSelector.attr('href', __blogURL + '/post/' + prevPost.slug + '.html');
+                    }
+                }
+            },
+            error: function (e) {
+                $prevPostSelector.hide();
+            }
+        });
+
+    });
+</script>
