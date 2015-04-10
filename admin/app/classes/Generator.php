@@ -20,13 +20,15 @@ class Generate
     private $publicDir = '../public/';
 
     private $parser = null;
+    private $shouldGeneratePosts = false;
+    private $shouldGeneratePages = false;
+    private $generateLog = array();
 
     public function generateBlog()
     {
         set_time_limit(0);
 
         global $app;
-        $message = "Blog has been generated in <strong>public</strong> folder <i class='fa fa-smile-o'></i>";
 
         $this->parser = new Parsedown();
 
@@ -37,7 +39,7 @@ class Generate
 
         // first copy all contents of template to public folder
         $this->copy_directory($layoutDir, $this->publicDir);
-        
+
         // delete mustache particals folders from public folder
         $this->rrmdir($this->publicDir . 'partials/');
 
@@ -62,6 +64,7 @@ class Generate
             $fileName = basename($tplFile);
             $fileName = str_replace('.mustache', '', $fileName);
 
+            // we will generate these later
             if ($fileName === 'category' ||
                $fileName === 'post' ||
                $fileName === 'page' ||
@@ -77,9 +80,10 @@ class Generate
             file_put_contents($this->publicDir . $fileName . '.html', $html);
         }
 
-        // generate post and page files
-        $this->generatePostPageFiles($mustache, $data, 'page');
+        // generate post files
         $this->generatePostPageFiles($mustache, $data, 'post');
+        // generate page files
+        $this->generatePostPageFiles($mustache, $data, 'page');
 
         // generate category and tag files
         $this->generateCategoryTagFiles($mustache, $data, 'category');
@@ -97,7 +101,12 @@ class Generate
         // copy data folder too
         $this->copy_directory('data', '../public/data');
 
-        echo $message;
+        // update settings generate status
+        $data = MetaDataWriter::getFileData($this->settingsFile);
+        $data['generated'] = '1';
+        MetaDataWriter::updateFileData($this->settingsFile, $data);
+
+        echo $this->getResult($this->generateLog);
     }
 
     private function getData()
@@ -124,9 +133,35 @@ class Generate
             $data['posts'][] = $post;
         }
 
-        // convert posts markdown to html
+
+        // see whether there is new content to be genrated
+        $this->shouldGeneratePosts = $this->isNewPostContent($data['posts']);
+        $this->shouldGeneratePages = $this->isNewPageContent($data['pages']);
+
+        // if settings are updated, we need to generate anyway
+        if (!$data['settings']['generated']) {
+            $this->shouldGeneratePosts = true;
+            $this->shouldGeneratePages = true;
+        }
+
+        // if no posts/pages were added/update and no settings were updated, dont do anything
+        if (!$this->shouldGeneratePosts && !$this->shouldGeneratePages && $data['settings']['generated']) {
+            exit('Nothing to generate!');
+        }
+
+        /*
+        if (empty($data['settings']['only_titles'])) {
+            $showbody = true;
+        } else {
+            $showbody = false;
+        }
+        */
+
         foreach ($data['posts'] as $key => $post) {
+            // convert posts markdown to html
             $data['posts'][$key]['body'] = $this->parser->text($post['body']);
+            // see whether to show full posts body or just titles
+            $data['posts'][$key]['showbody'] = '1';
         }
 
         // convert pages markdown to html
@@ -152,18 +187,6 @@ class Generate
         sort($categories);
         $data['categories'] = $categories;
         //pretty_print($data);
-
-        // see whether to show full posts body or just titles
-        if (empty($data['settings']['only_titles'])) {
-            $showbody = true;
-        } else {
-            $showbody = false;
-        }
-
-        foreach ($data['posts'] as $key => $post) {
-            $data['posts'][$key]['showbody'] = $showbody;
-        }
-
 
         // for latest posts - show 10 max
         $data['latestPosts'] = array_slice($data['posts'], 0, 10);
@@ -194,10 +217,10 @@ class Generate
             array_key_exists($word, $tagFreq) ? $tagFreq[$word] ++ : $tagFreq[$word] = 0;
         }
 
-        $data['tagsCloud'] = $this->createTagCloud($tagFreq);
+        $data['tagsCloud'] = $this->generateTagCloud($tagFreq);
 
         // generate archives
-        $data['archives'] = $this->createArchives($data['posts']);
+        $data['archives'] = $this->generateArchives($data['posts']);
 
         // write whole blog data to file
         MetaDataWriter::writeData($this->metaFile, $data);
@@ -214,13 +237,27 @@ class Generate
 
         $pagesDir = $this->publicDir . $type . '/';
 
-        foreach ($data[$type . 's'] as &$item) {
+        foreach ($data[$type . 's'] as $key => &$item) {
             $data[$type] = $item;
+
+            // if already generated, dont do anything
+            if ($data['settings']['generated']) {
+                if ($item['generated']) {
+                    continue;
+                }
+            }
 
             $template = $mustache->loadTemplate($type);
             $html = $template->render($data);
 
+            // add to generate log
+            $this->generateLog[$type . 's'][] = $item['slug'] . '.html';
+
             file_put_contents($pagesDir . $item['slug'] . '.html', $html);
+
+            // update generate status
+            $this->updateGenerateStatus($data[$type . 's'], $key, $type);
+
         }
 
         return true;
@@ -228,13 +265,17 @@ class Generate
 
     private function generateCategoryTagFiles($mustache, $data, $type)
     {
+        // whether to generate category/tag files
+        if (!$this->shouldGeneratePosts && $data['settings']['generated']) {
+            return false;
+        }
+
         if (!file_exists($this->publicDir . $type) && !mkdir($this->publicDir . $type)) {
             echo "Error: could not make $type directly in public folder";
             exit;
         }
 
         if ($type === 'category') {
-
             $items = $data['categories'];
 
             foreach ($items as $item) {
@@ -253,6 +294,10 @@ class Generate
                 $html = $template->render($data);
 
                 $fileName = getSlugName($item);
+
+                // add to generate log
+                $this->generateLog['categories'][] = "$fileName.html";
+
                 file_put_contents($itemRootDir . "/$fileName.html", $html);
             }
         } else {
@@ -283,41 +328,16 @@ class Generate
                 $html = $template->render($data);
 
                 $fileName = getSlugName($item);
+
+                // add to generate log
+                $this->generateLog['tags'][] = "$fileName.html";
+
                 file_put_contents($itemRootDir . "/$fileName.html", $html);
             }
         }
     }
 
-    function copy_directory($source, $destination)
-    {
-        if (is_dir($source)) {
-
-            @mkdir($destination);
-            $directory = dir($source);
-
-            while (false !== ($readdirectory = $directory->read())) {
-                if ($readdirectory == '.' || $readdirectory == '..') {
-                    continue;
-                }
-
-                $PathDir = $source . '/' . $readdirectory;
-
-                if (is_dir($PathDir)) {
-                    $this->copy_directory($PathDir, $destination . '/' . $readdirectory);
-                    continue;
-                }
-
-                copy($PathDir, $destination . '/' . $readdirectory);
-            }
-
-            $directory->close();
-
-        } else {
-            copy($source, $destination);
-        }
-    }
-
-    private function createTagCloud($data = array(), $minFontSize = 12, $maxFontSize = 30)
+    private function generateTagCloud($data = array(), $minFontSize = 12, $maxFontSize = 30)
     {
         $minimumCount = min(array_values($data));
         $maximumCount = max(array_values($data));
@@ -342,7 +362,7 @@ class Generate
         return implode("\n", $cloudTags) . "\n";
     }
 
-    private function createArchives($posts)
+    private function generateArchives($posts)
     {
         $archives = '<ul class="archives list-group">';
         $datesSorted = array();
@@ -389,6 +409,11 @@ class Generate
 
     private function generateArchiveFiles($mustache, $data)
     {
+        // whether to generate arhives
+        if (!$this->shouldGeneratePosts && $data['settings']['generated']) {
+            return false;
+        }
+
         if (!file_exists($this->publicDir . 'archive') && !mkdir($this->publicDir . 'archive')) {
             echo "Error: could not make archives directly in public folder";
             exit;
@@ -412,8 +437,12 @@ class Generate
 
                 $data['archivePosts'] = $archivesData;
 
+
                 $template = $mustache->loadTemplate('archive');
                 $html = $template->render($data);
+
+                // add to generate log
+                $this->generateLog['arhives'][] = $archiveName . "/index.html";
 
                 file_put_contents($archivesDir . $archiveName . "/index.html", $html);
             }
@@ -422,6 +451,11 @@ class Generate
 
     private function generateRSS($data)
     {
+        // whether to generate rss
+        if (!$this->shouldGeneratePosts && $data['settings']['generated']) {
+            return false;
+        }
+
         $newline = PHP_EOL;
         $rssfeed = '<?xml version="1.0" encoding="ISO-8859-1"?>' . $newline;
         $rssfeed .= '<rss version="2.0">' . $newline;
@@ -495,18 +529,107 @@ SITEMAP;
 
         file_put_contents($this->publicDir . 'sitemap.xml', $sitemap) or die('error writing sitemap file!');
     }
-    
-    function rrmdir($dir) { 
-       if (is_dir($dir)) { 
-         $objects = scandir($dir); 
-         foreach ($objects as $object) { 
-           if ($object != "." && $object != "..") { 
-             if (filetype($dir."/".$object) == "dir") rrmdir($dir."/".$object); else unlink($dir."/".$object); 
-           } 
-         } 
-         reset($objects); 
-         rmdir($dir); 
-       } 
-    }     
 
+    private function copy_directory($source, $destination)
+    {
+        if (is_dir($source)) {
+
+            @mkdir($destination);
+            $directory = dir($source);
+
+            while (false !== ($readdirectory = $directory->read())) {
+                if ($readdirectory == '.' || $readdirectory == '..') {
+                    continue;
+                }
+
+                $PathDir = $source . '/' . $readdirectory;
+
+                if (is_dir($PathDir)) {
+                    $this->copy_directory($PathDir, $destination . '/' . $readdirectory);
+                    continue;
+                }
+
+                copy($PathDir, $destination . '/' . $readdirectory);
+            }
+
+            $directory->close();
+
+        } else {
+            copy($source, $destination);
+        }
+    }
+
+    private function rrmdir($dir)
+    {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (filetype($dir . "/" . $object) == "dir") {
+                        rrmdir($dir . "/" . $object);
+                    } else {
+                        unlink($dir . "/" . $object);
+                    }
+                }
+            }
+            reset($objects);
+            rmdir($dir);
+        }
+    }
+
+    private function isNewPostContent($posts)
+    {
+        foreach ($posts as $post) {
+            if (!$post['generated']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isNewPageContent($pages)
+    {
+        foreach ($pages as $page) {
+            if (!$page['generated']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function updateGenerateStatus($data, $key, $type)
+    {
+        $data[$key]['generated'] = '1';
+        MetaDataWriter::writeData($this->{$type . 'sFile'}, $data);
+    }
+
+    private function getResult(array $generateLog)
+    {
+        $output = '';
+
+        $pages = $generateLog['pages'];
+        $pages = array_unique($pages);
+
+        $posts = $generateLog['posts'];
+        $posts = array_unique($posts);
+
+        $categories = $generateLog['categories'];
+        $categories = array_unique($categories);
+
+        $tags = $generateLog['tags'];
+        $tags = array_unique($tags);
+
+        $arhives = $generateLog['arhives'];
+        $arhives = array_unique($arhives);
+
+        $output .= '<strong>Posts:</strong><br>' . implode('<br>', $posts) . '<hr>';
+        $output .= '<strong>Pages:</strong><br>' . implode('<br>', $pages) . '<hr>';
+        $output .= '<strong>Categories:</strong><br>' . implode('<br>', $categories) . '<hr>';
+        $output .= '<strong>Tags:</strong><br>' . implode('<br>', $tags) . '<hr>';
+        $output .= '<strong>Archives:</strong><br>' . implode('<br>', $arhives);
+
+        return $output;
+    }
 }

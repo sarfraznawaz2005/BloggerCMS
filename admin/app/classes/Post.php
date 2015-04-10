@@ -144,6 +144,7 @@ class Post
         }
 
         $data[$id]['slug'] = getSlugName($post['title']);
+        $data[$id]['generated'] = '';
 
         MetaDataWriter::writeData($this->metaFile, $data);
 
@@ -230,6 +231,7 @@ class Post
         $data[$id]['dated'] = date($app->view()->getData('dateFormat'));
         $data[$id]['slug'] = getSlugName($data[$id]['title']);
         $data[$id]['status'] = self::STATUS_PUBLISHED;
+        $data[$id]['generated'] = '';
 
         MetaDataWriter::writeData($this->metaFile, $data);
 

@@ -68,6 +68,7 @@ class Page
         }
 
         $data[$id]['slug'] = getSlugName($post['title']);
+        $data[$id]['generated'] = '';
 
         MetaDataWriter::writeData($this->metaFile, $data);
 
