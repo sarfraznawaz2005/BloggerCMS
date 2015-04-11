@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BloggerCMS - Easiest Static Blog Generator
  *
@@ -28,7 +29,6 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
- 
 class Generate
 {
     // data files
@@ -273,13 +273,13 @@ class Generate
             $template = $mustache->loadTemplate($type);
             $html = $template->render($data);
 
-            // add to generate log
-            $this->generateLog[$type . 's'][] = $item['slug'] . '.html';
+            if (file_put_contents($pagesDir . $item['slug'] . '.html', $html)) {
+                // add to generate log
+                $this->generateLog[$type . 's'][] = $item['slug'] . '.html';
 
-            file_put_contents($pagesDir . $item['slug'] . '.html', $html);
-
-            // update generate status
-            $this->updateGenerateStatus($data[$type . 's'], $key, $type);
+                // update generate status
+                $this->updateGenerateStatus($key, $type);
+            }
 
         }
 
@@ -318,10 +318,10 @@ class Generate
 
                 $fileName = getSlugName($item);
 
-                // add to generate log
-                $this->generateLog['categories'][] = "$fileName.html";
-
-                file_put_contents($itemRootDir . "/$fileName.html", $html);
+                if (file_put_contents($itemRootDir . "/$fileName.html", $html)) {
+                    // add to generate log
+                    $this->generateLog['categories'][] = "$fileName.html";
+                }
             }
         } else {
             $items = array();
@@ -352,10 +352,10 @@ class Generate
 
                 $fileName = getSlugName($item);
 
-                // add to generate log
-                $this->generateLog['tags'][] = "$fileName.html";
-
-                file_put_contents($itemRootDir . "/$fileName.html", $html);
+                if (file_put_contents($itemRootDir . "/$fileName.html", $html)) {
+                    // add to generate log
+                    $this->generateLog['tags'][] = "$fileName.html";
+                }
             }
         }
     }
@@ -464,10 +464,10 @@ class Generate
                 $template = $mustache->loadTemplate('archive');
                 $html = $template->render($data);
 
-                // add to generate log
-                $this->generateLog['arhives'][] = $archiveName . "/index.html";
-
-                file_put_contents($archivesDir . $archiveName . "/index.html", $html);
+                if (file_put_contents($archivesDir . $archiveName . "/index.html", $html)) {
+                    // add to generate log
+                    $this->generateLog['arhives'][] = $archiveName . "/index.html";
+                }
             }
         }
     }
@@ -622,8 +622,9 @@ SITEMAP;
         return false;
     }
 
-    private function updateGenerateStatus($data, $key, $type)
+    private function updateGenerateStatus($key, $type)
     {
+        $data = MetaDataWriter::getFileData($this->{$type . 'sFile'});
         $data[$key]['generated'] = '1';
         MetaDataWriter::writeData($this->{$type . 'sFile'}, $data);
     }
