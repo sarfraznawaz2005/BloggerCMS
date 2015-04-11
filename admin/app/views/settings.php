@@ -120,6 +120,15 @@
                                             <option <?php echo $data['theme'] === 'yeti.min.css' ? 'selected' : '' ?> value="yeti.min.css">
                                                 Yeti Flat
                                             </option>
+                                            <option <?php echo $data['theme'] === 'cerulean.min.css' ? 'selected' : '' ?> value="cerulean.min.css">
+                                                Cerulean
+                                            </option>
+                                            <option <?php echo $data['theme'] === 'lavish.css' ? 'selected' : '' ?> value="lavish.css">
+                                                Lavish
+                                            </option>
+                                            <option <?php echo $data['theme'] === 'united.min.css' ? 'selected' : '' ?> value="united.min.css">
+                                                United
+                                            </option>
                                         </select>
 
                                         <p class="help-block">The theme to be used for blog. Only applicable for default
