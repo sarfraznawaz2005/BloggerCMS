@@ -56,6 +56,9 @@ class Setting implements Crud
         global $app;
         $post = $app->request()->post();
 
+
+        $post['id'] = time();
+
         MetaDataWriter::updateFileData($this->customValuesFile, $post, true);
 
         // also update settings generate status

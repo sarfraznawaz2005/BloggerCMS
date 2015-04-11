@@ -218,6 +218,7 @@
                             <table class="table table-bordered table-responsive">
                                 <thead>
                                 <tr>
+                                    <th><strong>Unique Id</strong></th>
                                     <th><strong>Title</strong></th>
                                     <th><strong>Value</strong></th>
                                     <th class="text-center"><strong>Actions</strong></th>
@@ -229,6 +230,7 @@
                                 foreach ($data['customValues'] as $key => $customValue) {
                                     ?>
                                     <tr>
+                                        <td><?php echo $customValue['id']; ?></td>
                                         <td><?php echo $customValue['title']; ?></td>
                                         <td><?php echo htmlentities($customValue['value'], ENT_QUOTES) ?></td>
                                         <td width="80" align="center">
