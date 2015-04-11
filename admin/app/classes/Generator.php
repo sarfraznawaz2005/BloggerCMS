@@ -41,10 +41,7 @@ class Generate
 
     // other vars
     private $publicDir = '../public/';
-
     private $parser = null;
-    private $shouldGeneratePosts = false;
-    private $shouldGeneratePages = false;
     private $generateLog = array();
 
     public function generateBlog()
@@ -66,11 +63,11 @@ class Generate
         // delete mustache particals folders from public folder
         $this->rrmdir($this->publicDir . 'partials/');
 
-        // delete tpl from public dir
-        $tplFiles = glob($this->publicDir . '/*.mustache');
+        // delete *.mustache from public dir
+        $mustacheFiles = glob($this->publicDir . '/*.mustache');
 
-        foreach ($tplFiles as $tplFile) {
-            @unlink($tplFile);
+        foreach ($mustacheFiles as $mustacheFile) {
+            @unlink($mustacheFile);
         }
 
         // now create actual html pages
@@ -81,10 +78,10 @@ class Generate
            )
         );
 
-        $tplFiles = glob($layoutDir . '/*.mustache');
+        $mustacheFiles = glob($layoutDir . '/*.mustache');
 
-        foreach ($tplFiles as $tplFile) {
-            $fileName = basename($tplFile);
+        foreach ($mustacheFiles as $mustacheFile) {
+            $fileName = basename($mustacheFile);
             $fileName = str_replace('.mustache', '', $fileName);
 
             // we will generate these later
@@ -124,11 +121,6 @@ class Generate
         // copy data folder too
         $this->copy_directory('data', '../public/data');
 
-        // update settings generate status
-        $data = MetaDataWriter::getFileData($this->settingsFile);
-        $data['generated'] = '1';
-        MetaDataWriter::updateFileData($this->settingsFile, $data);
-
         echo $this->getResult($this->generateLog);
     }
 
@@ -143,11 +135,11 @@ class Generate
         $data['settings']['url'] = rtrim($data['settings']['url'], '/');
 
         $data['customValues'] = MetaDataWriter::getFileData($this->customValuesFile);
-        $posts = MetaDataWriter::getFileData($this->postsFile);
         $data['pages'] = MetaDataWriter::getFileData($this->pagesFile);
         $data['follow'] = MetaDataWriter::getFileData($this->followFile);
+        $posts = MetaDataWriter::getFileData($this->postsFile);
 
-        // only add published posts
+        // we want to create pages for only "published" status posts
         foreach ($posts as $post) {
             if ($post['status'] === 'draft' || $post['status'] === 'trashed') {
                 continue;
@@ -155,30 +147,6 @@ class Generate
 
             $data['posts'][] = $post;
         }
-
-
-        // see whether there is new content to be genrated
-        $this->shouldGeneratePosts = $this->isNewPostContent($data['posts']);
-        $this->shouldGeneratePages = $this->isNewPageContent($data['pages']);
-
-        // if settings are updated, we need to generate anyway
-        if (!$data['settings']['generated']) {
-            $this->shouldGeneratePosts = true;
-            $this->shouldGeneratePages = true;
-        }
-
-        // if no posts/pages were added/update and no settings were updated, dont do anything
-        if (!$this->shouldGeneratePosts && !$this->shouldGeneratePages && $data['settings']['generated']) {
-            exit('Nothing to generate!');
-        }
-
-        /*
-        if (empty($data['settings']['only_titles'])) {
-            $showbody = true;
-        } else {
-            $showbody = false;
-        }
-        */
 
         foreach ($data['posts'] as $key => $post) {
             // convert posts markdown to html
@@ -263,22 +231,12 @@ class Generate
         foreach ($data[$type . 's'] as $key => &$item) {
             $data[$type] = $item;
 
-            // if already generated, dont do anything
-            if ($data['settings']['generated']) {
-                if ($item['generated']) {
-                    continue;
-                }
-            }
-
             $template = $mustache->loadTemplate($type);
             $html = $template->render($data);
 
             if (file_put_contents($pagesDir . $item['slug'] . '.html', $html)) {
                 // add to generate log
                 $this->generateLog[$type . 's'][] = $item['slug'] . '.html';
-
-                // update generate status
-                $this->updateGenerateStatus($key, $type);
             }
 
         }
@@ -288,11 +246,6 @@ class Generate
 
     private function generateCategoryTagFiles($mustache, $data, $type)
     {
-        // whether to generate category/tag files
-        if (!$this->shouldGeneratePosts && $data['settings']['generated']) {
-            return false;
-        }
-
         if (!file_exists($this->publicDir . $type) && !mkdir($this->publicDir . $type)) {
             echo "Error: could not make $type directly in public folder";
             exit;
@@ -411,6 +364,7 @@ class Generate
 
         foreach ($datesSorted as $date) {
 
+            // show count of posts in each category
             /*
             $postCount = 0;
             foreach ($posts as $postItem) {
@@ -432,11 +386,6 @@ class Generate
 
     private function generateArchiveFiles($mustache, $data)
     {
-        // whether to generate arhives
-        if (!$this->shouldGeneratePosts && $data['settings']['generated']) {
-            return false;
-        }
-
         if (!file_exists($this->publicDir . 'archive') && !mkdir($this->publicDir . 'archive')) {
             echo "Error: could not make archives directly in public folder";
             exit;
@@ -474,11 +423,6 @@ class Generate
 
     private function generateRSS($data)
     {
-        // whether to generate rss
-        if (!$this->shouldGeneratePosts && $data['settings']['generated']) {
-            return false;
-        }
-
         $newline = PHP_EOL;
         $rssfeed = '<?xml version="1.0" encoding="ISO-8859-1"?>' . $newline;
         $rssfeed .= '<rss version="2.0">' . $newline;
@@ -598,35 +542,6 @@ SITEMAP;
             reset($objects);
             rmdir($dir);
         }
-    }
-
-    private function isNewPostContent($posts)
-    {
-        foreach ($posts as $post) {
-            if (!$post['generated']) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function isNewPageContent($pages)
-    {
-        foreach ($pages as $page) {
-            if (!$page['generated']) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function updateGenerateStatus($key, $type)
-    {
-        $data = MetaDataWriter::getFileData($this->{$type . 'sFile'});
-        $data[$key]['generated'] = '1';
-        MetaDataWriter::writeData($this->{$type . 'sFile'}, $data);
     }
 
     private function getResult(array $generateLog)

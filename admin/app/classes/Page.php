@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BloggerCMS - Easiest Static Blog Generator
  *
@@ -28,7 +29,6 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
- 
 class Page
 {
     private $metaFile = 'data/pages.json';
@@ -91,7 +91,6 @@ class Page
         }
 
         $data[$id]['slug'] = getSlugName($post['title']);
-        $data[$id]['generated'] = '';
 
         MetaDataWriter::writeData($this->metaFile, $data);
 

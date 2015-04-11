@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BloggerCMS - Easiest Static Blog Generator
  *
@@ -28,7 +29,6 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
- 
 class Setting implements Crud
 {
     private $metaFile = 'data/settings.json';
@@ -52,7 +52,6 @@ class Setting implements Crud
 
         $post['only_titles'] = isset($post['only_titles']) ? 'true' : '';
         $post['url'] = rtrim(trim($post['url']), '/');
-        $post['generated'] = '';
 
         MetaDataWriter::updateFileData($this->metaFile, $post);
 
@@ -67,9 +66,6 @@ class Setting implements Crud
 
         MetaDataWriter::updateFileData($this->followFile, $post);
 
-        // also update settings generate status
-        $this->updateGenerateStatus();
-
         $app->flash('info', 'Saved Successfully');
         $app->redirect($_SERVER['HTTP_REFERER']);
     }
@@ -83,9 +79,6 @@ class Setting implements Crud
         $post['id'] = time();
 
         MetaDataWriter::updateFileData($this->customValuesFile, $post, true);
-
-        // also update settings generate status
-        $this->updateGenerateStatus();
 
         $app->flash('info', 'Saved Successfully');
         $app->redirect($_SERVER['HTTP_REFERER']);
@@ -103,18 +96,8 @@ class Setting implements Crud
 
         MetaDataWriter::writeData($this->customValuesFile, $data);
 
-        // also update settings generate status
-        $this->updateGenerateStatus();
-
         $app->flash('info', 'Deleted Successfully');
         $app->redirect($_SERVER['HTTP_REFERER']);
-    }
-
-    public function updateGenerateStatus()
-    {
-        $data = MetaDataWriter::getFileData($this->metaFile);
-        $data['generated'] = '';
-        MetaDataWriter::updateFileData($this->metaFile, $data);
     }
 
     public function getBlogURL()
