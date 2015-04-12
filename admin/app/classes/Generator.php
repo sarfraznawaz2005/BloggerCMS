@@ -180,8 +180,8 @@ class Generate
         $data['categories'] = $categories;
         //pretty_print($data);
 
-        // for latest posts - show 10 max
-        $data['latestPosts'] = array_slice($data['posts'], 0, 10);
+        // for latest posts - show 5 max
+        $data['latestPosts'] = array_slice($data['posts'], 0, 5);
 
         // total posts to show on homepage
         //$countHomePosts = $data['settings']['number_posts'] ?: 10;
@@ -260,7 +260,7 @@ class Generate
 
                 $itemData = array();
                 foreach ($data['posts'] as $post) {
-                    if ($post[$type] === $item) {
+                    if ($post[$type] === $item['category']) {
                         $itemData[] = $post;
                     }
                 }
@@ -270,7 +270,7 @@ class Generate
                 $template = $mustache->loadTemplate($type);
                 $html = $template->render($data);
 
-                $fileName = getSlugName($item);
+                $fileName = getSlugName($item['category']);
 
                 if (file_put_contents($itemRootDir . "/$fileName.html", $html)) {
                     // add to generate log
