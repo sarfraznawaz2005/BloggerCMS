@@ -73,6 +73,7 @@ class Post
         // add post
         $post['dated'] = date($app->view()->getData('dateFormat'));
         $post['slug'] = getSlugName($post['title']);
+        $post['categoryslug'] = getSlugName($post['category']);
         $post['status'] = $status;
 
         MetaDataWriter::updateFileData($this->metaFile, $post, true);
@@ -167,6 +168,7 @@ class Post
         }
 
         $data[$id]['slug'] = getSlugName($post['title']);
+        $data[$id]['categoryslug'] = getSlugName($post['category']);
 
         MetaDataWriter::writeData($this->metaFile, $data);
 
@@ -252,6 +254,7 @@ class Post
 
         $data[$id]['dated'] = date($app->view()->getData('dateFormat'));
         $data[$id]['slug'] = getSlugName($data[$id]['title']);
+        $data[$id]['categoryslug'] = getSlugName($data[$id]['category']);
         $data[$id]['status'] = self::STATUS_PUBLISHED;
 
         MetaDataWriter::writeData($this->metaFile, $data);

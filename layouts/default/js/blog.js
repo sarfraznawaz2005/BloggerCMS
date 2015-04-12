@@ -6,11 +6,6 @@ $(function () {
     // enable syntax highlighting
     hljs.initHighlightingOnLoad();
     
-    // lowercase link hrefs
-    $('a.lowercase').each(function () {
-        this.href = this.href.toLowerCase();
-    });
-
     // set nav link as selected if on the page
     var pageArray = document.location.href.split('/');
     var page = pageArray[pageArray.length - 1];

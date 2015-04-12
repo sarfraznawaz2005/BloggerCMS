@@ -48,6 +48,8 @@ class Tag
         $post = $app->request()->post();
         //pretty_print($post['tags']);
 
+        $post['tags'] = array_map('strtolower', $post['tags']);
+
         MetaDataWriter::writeData($this->metaFile, $post['tags']);
 
         $app->flash('info', 'Saved Successfully');

@@ -10,14 +10,14 @@
         <div class="post-info">
             {{#category}}
                 <span class="glyphicon glyphicon-folder-open"></span> &nbsp;
-                <a class="lowercase" href="{{settings.url}}/category/{{category}}.html">{{category}}</a>
+                <a href="{{settings.url}}/category/{{categoryslug}}.html">{{category}}</a>
                 &nbsp;&nbsp;
             {{/category}}
 
             <span class="glyphicon glyphicon-bookmark"></span>
 
             {{#tags}}
-                <a class="lowercase" href="{{settings.url}}/tag/{{.}}.html">{{.}}</a>&nbsp;&nbsp;
+                <a href="{{settings.url}}/tag/{{.}}.html">{{.}}</a>&nbsp;&nbsp;
             {{/tags}}
         </div>
 

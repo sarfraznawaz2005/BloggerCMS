@@ -171,10 +171,11 @@ class Generate
         // categories
         $categories = array();
         foreach ($data['posts'] as $post) {
-            $categories[] = $post['category'];
+            if (!in_array($post['category'], $categories)) {
+                $categories[] = array('category' => $post['category'], 'categoryslug' => $post['categoryslug']);
+            }
         }
 
-        $categories = array_unique($categories);
         sort($categories);
         $data['categories'] = $categories;
         //pretty_print($data);

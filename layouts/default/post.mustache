@@ -16,14 +16,14 @@
                 <div class="post-info">
                     {{#post.category}}
                         <span class="glyphicon glyphicon-folder-open"></span> &nbsp;
-                        <a class="lowercase" href="{{settings.url}}/category/{{post.category}}.html">{{post.category}}</a>
+                        <a href="{{settings.url}}/category/{{post.categoryslug}}.html">{{post.category}}</a>
                         &nbsp;&nbsp;
                     {{/post.category}}
 
                     <span class="glyphicon glyphicon-bookmark"></span>
 
                     {{#post.tags}}
-                        <a class="lowercase" href="{{settings.url}}/tag/{{.}}.html">{{.}}</a>&nbsp;&nbsp;
+                        <a href="{{settings.url}}/tag/{{.}}.html">{{.}}</a>&nbsp;&nbsp;
                     {{/post.tags}}
                 </div>
 
