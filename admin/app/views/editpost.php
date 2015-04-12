@@ -91,6 +91,8 @@
                             </button>
                         </div>
 
+                        <input type="hidden" name="prevStatus" value="<?php echo $data['status'];?>"/>
+
                     </form>
                 </div>
             </div>

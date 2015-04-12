@@ -167,6 +167,14 @@ class Post
             $data[$id][$key] = $value;
         }
 
+        // reset post published date if it was draft before and now published
+        if (
+           $post['status'] === self::STATUS_PUBLISHED &&
+           $post['prevStatus'] === self::STATUS_DRAFT
+        ) {
+            $data[$id]['dated'] = date($app->view()->getData('dateFormat'));
+        }
+
         $data[$id]['slug'] = getSlugName($post['title']);
         $data[$id]['categoryslug'] = getSlugName($post['category']);
 
