@@ -169,10 +169,12 @@ class Generate
         array_multisort($dates, SORT_DESC, $data['posts']);
 
         // categories
+        $addedCategories = array();
         $categories = array();
         foreach ($data['posts'] as $post) {
-            if (!in_array($post['category'], $categories)) {
+            if (false === in_array($post['category'], $addedCategories)) {
                 $categories[] = array('category' => $post['category'], 'categoryslug' => $post['categoryslug']);
+                $addedCategories[] = $post['category'];
             }
         }
 
