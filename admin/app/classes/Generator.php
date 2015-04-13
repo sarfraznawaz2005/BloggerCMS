@@ -121,7 +121,13 @@ class Generate
         // copy data folder too
         $this->copy_directory('data', '../public/data');
 
-        echo $this->getResult($this->generateLog);
+        // write generate log
+        $this->writeGenerateLog($this->generateLog);
+
+        $message = '';
+        $message .= 'Blog has been generated in <strong>public</strong> folder :)<br><br>';
+        $message .= '<a class="btn btn-primary" target="_blank" href="genlog.html">View Log</a>';
+        echo $message;
     }
 
     protected function getData()
@@ -547,7 +553,7 @@ SITEMAP;
         }
     }
 
-    protected function getResult(array $generateLog)
+    protected function writeGenerateLog(array $generateLog)
     {
         $output = '';
 
@@ -572,6 +578,6 @@ SITEMAP;
         $output .= '<strong>Tags:</strong><br>' . implode('<br>', $tags) . '<hr>';
         $output .= '<strong>Archives:</strong><br>' . implode('<br>', $arhives);
 
-        return $output;
+        @file_put_contents('genlog.html', $output);
     }
 }
