@@ -339,8 +339,8 @@ class Post
     protected function getSummary($html, $maxChars)
     {
         // convert markdown to html
-        $this->parser = new Parsedown();
-        $html = $this->parser->text($html);
+        $parser = new Parsedown();
+        $html = $parser->text($html);
 
         // make excerpt
         $html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
