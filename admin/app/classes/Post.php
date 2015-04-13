@@ -65,7 +65,7 @@ class Post
 
     }
 
-    private function addPost($status)
+    protected function addPost($status)
     {
         global $app;
         $post = $app->request()->post();
@@ -75,6 +75,7 @@ class Post
         $post['slug'] = getSlugName($post['title']);
         $post['categoryslug'] = getSlugName($post['category']);
         $post['status'] = $status;
+        $post['summary'] = $this->getSummary($post['body'], 300);
 
         MetaDataWriter::updateFileData($this->metaFile, $post, true);
 
@@ -177,6 +178,7 @@ class Post
 
         $data[$id]['slug'] = getSlugName($post['title']);
         $data[$id]['categoryslug'] = getSlugName($post['category']);
+        $data[$id]['summary'] = $this->getSummary($post['body'], 300);
 
         MetaDataWriter::writeData($this->metaFile, $data);
 
@@ -332,6 +334,24 @@ class Post
         }
 
         return $counter;
+    }
+
+    protected function getSummary($html, $maxChars)
+    {
+        // convert markdown to html
+        $this->parser = new Parsedown();
+        $html = $this->parser->text($html);
+
+        // make excerpt
+        $html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
+        $html = mb_substr($html, 0, $maxChars, 'UTF-8') . '...';
+
+        // fix broken tags
+        $dom = new DOMDocument;
+        $dom->loadHTML($html);
+        $summary = $dom->saveXML();
+
+        return $summary;
     }
 
 }

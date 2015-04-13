@@ -29,7 +29,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-class Generate
+class Generate1
 {
     // data files
     private $metaFile = 'data/blog.json';
@@ -41,7 +41,10 @@ class Generate
 
     // other vars
     private $publicDir = '../public/';
+
     private $parser = null;
+    private $shouldGeneratePosts = false;
+    private $shouldGeneratePages = false;
     private $generateLog = array();
 
     public function generateBlog()
@@ -63,11 +66,11 @@ class Generate
         // delete mustache particals folders from public folder
         $this->rrmdir($this->publicDir . 'partials/');
 
-        // delete *.mustache from public dir
-        $mustacheFiles = glob($this->publicDir . '/*.mustache');
+        // delete tpl from public dir
+        $tplFiles = glob($this->publicDir . '/*.mustache');
 
-        foreach ($mustacheFiles as $mustacheFile) {
-            @unlink($mustacheFile);
+        foreach ($tplFiles as $tplFile) {
+            @unlink($tplFile);
         }
 
         // now create actual html pages
@@ -78,10 +81,10 @@ class Generate
            )
         );
 
-        $mustacheFiles = glob($layoutDir . '/*.mustache');
+        $tplFiles = glob($layoutDir . '/*.mustache');
 
-        foreach ($mustacheFiles as $mustacheFile) {
-            $fileName = basename($mustacheFile);
+        foreach ($tplFiles as $tplFile) {
+            $fileName = basename($tplFile);
             $fileName = str_replace('.mustache', '', $fileName);
 
             // we will generate these later
@@ -101,9 +104,14 @@ class Generate
         }
 
         // generate post files
-        $this->generatePostPageFiles($mustache, $data, 'post');
+        if ($this->shouldGeneratePosts) {
+            $this->generatePostPageFiles($mustache, $data, 'post');
+        }
+
         // generate page files
-        $this->generatePostPageFiles($mustache, $data, 'page');
+        if ($this->shouldGeneratePages) {
+            $this->generatePostPageFiles($mustache, $data, 'page');
+        }
 
         // generate category and tag files
         $this->generateCategoryTagFiles($mustache, $data, 'category');
@@ -135,11 +143,11 @@ class Generate
         $data['settings']['url'] = rtrim($data['settings']['url'], '/');
 
         $data['customValues'] = MetaDataWriter::getFileData($this->customValuesFile);
+        $posts = MetaDataWriter::getFileData($this->postsFile);
         $data['pages'] = MetaDataWriter::getFileData($this->pagesFile);
         $data['follow'] = MetaDataWriter::getFileData($this->followFile);
-        $posts = MetaDataWriter::getFileData($this->postsFile);
 
-        // we want to create pages for only "published" status posts
+        // only add published posts
         foreach ($posts as $post) {
             if ($post['status'] === 'draft' || $post['status'] === 'trashed') {
                 continue;
@@ -148,11 +156,22 @@ class Generate
             $data['posts'][] = $post;
         }
 
+
+        // see whether there is new content to be genrated
+        $this->shouldGeneratePosts = $this->isNewPostContent($data['posts']);
+        $this->shouldGeneratePages = $this->isNewPageContent($data['pages']);
+
+        if (empty($data['settings']['only_titles'])) {
+            $showbody = true;
+        } else {
+            $showbody = false;
+        }
+
         foreach ($data['posts'] as $key => $post) {
             // convert posts markdown to html
             $data['posts'][$key]['body'] = $this->parser->text($post['body']);
             // see whether to show full posts body or just titles
-            $data['posts'][$key]['showbody'] = '1';
+            $data['posts'][$key]['showbody'] = $showbody;
         }
 
         // convert pages markdown to html
@@ -169,21 +188,18 @@ class Generate
         array_multisort($dates, SORT_DESC, $data['posts']);
 
         // categories
-        $addedCategories = array();
         $categories = array();
         foreach ($data['posts'] as $post) {
-            if (false === in_array($post['category'], $addedCategories)) {
-                $categories[] = array('category' => $post['category'], 'categoryslug' => $post['categoryslug']);
-                $addedCategories[] = $post['category'];
-            }
+            $categories[] = $post['category'];
         }
 
+        $categories = array_unique($categories);
         sort($categories);
         $data['categories'] = $categories;
         //pretty_print($data);
 
-        // for latest posts - show 5 max
-        $data['latestPosts'] = array_slice($data['posts'], 0, 5);
+        // for latest posts - show 10 max
+        $data['latestPosts'] = array_slice($data['posts'], 0, 10);
 
         // total posts to show on homepage
         //$countHomePosts = $data['settings']['number_posts'] ?: 10;
@@ -234,13 +250,21 @@ class Generate
         foreach ($data[$type . 's'] as $key => &$item) {
             $data[$type] = $item;
 
+            // if already generated, dont do anything
+            if ($item['generated']) {
+                continue;
+            }
+
             $template = $mustache->loadTemplate($type);
             $html = $template->render($data);
 
-            if (file_put_contents($pagesDir . $item['slug'] . '.html', $html)) {
-                // add to generate log
-                $this->generateLog[$type . 's'][] = $item['slug'] . '.html';
-            }
+            // add to generate log
+            $this->generateLog[$type . 's'][] = $item['slug'] . '.html';
+
+            file_put_contents($pagesDir . $item['slug'] . '.html', $html);
+
+            // update generate status
+            $this->updateGenerateStatus($key, $type);
 
         }
 
@@ -249,6 +273,14 @@ class Generate
 
     protected function generateCategoryTagFiles($mustache, $data, $type)
     {
+        // commented because we already need to generate these in case user changed layout, theme, etc
+        // whether to generate category/tag files
+        /*
+        if (!$this->shouldGeneratePosts) {
+            return false;
+        }
+        */
+
         if (!file_exists($this->publicDir . $type) && !mkdir($this->publicDir . $type)) {
             echo "Error: could not make $type directly in public folder";
             exit;
@@ -262,7 +294,7 @@ class Generate
 
                 $itemData = array();
                 foreach ($data['posts'] as $post) {
-                    if ($post[$type] === $item['category']) {
+                    if ($post[$type] === $item) {
                         $itemData[] = $post;
                     }
                 }
@@ -272,12 +304,12 @@ class Generate
                 $template = $mustache->loadTemplate($type);
                 $html = $template->render($data);
 
-                $fileName = getSlugName($item['category']);
+                $fileName = getSlugName($item);
 
-                if (file_put_contents($itemRootDir . "/$fileName.html", $html)) {
-                    // add to generate log
-                    $this->generateLog['categories'][] = "$fileName.html";
-                }
+                // add to generate log
+                $this->generateLog['categories'][] = "$fileName.html";
+
+                file_put_contents($itemRootDir . "/$fileName.html", $html);
             }
         } else {
             $items = array();
@@ -308,10 +340,10 @@ class Generate
 
                 $fileName = getSlugName($item);
 
-                if (file_put_contents($itemRootDir . "/$fileName.html", $html)) {
-                    // add to generate log
-                    $this->generateLog['tags'][] = "$fileName.html";
-                }
+                // add to generate log
+                $this->generateLog['tags'][] = "$fileName.html";
+
+                file_put_contents($itemRootDir . "/$fileName.html", $html);
             }
         }
     }
@@ -367,7 +399,6 @@ class Generate
 
         foreach ($datesSorted as $date) {
 
-            // show count of posts in each category
             /*
             $postCount = 0;
             foreach ($posts as $postItem) {
@@ -389,6 +420,13 @@ class Generate
 
     protected function generateArchiveFiles($mustache, $data)
     {
+        // whether to generate arhives
+        /*
+        if (!$this->shouldGeneratePosts) {
+            return false;
+        }
+        */
+
         if (!file_exists($this->publicDir . 'archive') && !mkdir($this->publicDir . 'archive')) {
             echo "Error: could not make archives directly in public folder";
             exit;
@@ -416,16 +454,21 @@ class Generate
                 $template = $mustache->loadTemplate('archive');
                 $html = $template->render($data);
 
-                if (file_put_contents($archivesDir . $archiveName . "/index.html", $html)) {
-                    // add to generate log
-                    $this->generateLog['arhives'][] = $archiveName . "/index.html";
-                }
+                // add to generate log
+                $this->generateLog['arhives'][] = $archiveName . "/index.html";
+
+                file_put_contents($archivesDir . $archiveName . "/index.html", $html);
             }
         }
     }
 
     protected function generateRSS($data)
     {
+        // whether to generate rss
+        if (!$this->shouldGeneratePosts) {
+            return false;
+        }
+
         $newline = PHP_EOL;
         $rssfeed = '<?xml version="1.0" encoding="ISO-8859-1"?>' . $newline;
         $rssfeed .= '<rss version="2.0">' . $newline;
@@ -545,6 +588,35 @@ SITEMAP;
             reset($objects);
             rmdir($dir);
         }
+    }
+
+    protected function isNewPostContent($posts)
+    {
+        foreach ($posts as $post) {
+            if (!$post['generated']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function isNewPageContent($pages)
+    {
+        foreach ($pages as $page) {
+            if (!$page['generated']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function updateGenerateStatus($key, $type)
+    {
+        $data = MetaDataWriter::getFileData($this->{$type . 'sFile'});
+        $data[$key]['generated'] = '1';
+        MetaDataWriter::writeData($this->{$type . 'sFile'}, $data);
     }
 
     protected function getResult(array $generateLog)
