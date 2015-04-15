@@ -83,9 +83,11 @@ if ($config['mode'] === 'development') {
     $app->configureMode(
        'development',
        function () use ($log) {
+            /*
            $log->setLevel(\Slim\Log::DEBUG);
            $log->setEnabled(true);
            $log->debug("Application Started...");
+           */
        }
     );
 }
