@@ -39,6 +39,9 @@ $('.tags').select2({"tags": true});
 // generate blog modal
 $('#generate_blog').click(function () {
     var $modal = $('#modal-generate');
+
+    $modal.find('.modal-body #message').html('<i class="fa fa-circle-o-notch fa-spin"></i> Working, please wait...');
+
     $modal.modal({"show": true, "backdrop": "static"});
     $modal.find('.modal-footer').hide();
 
@@ -46,4 +49,9 @@ $('#generate_blog').click(function () {
         $modal.find('#message').html(response);
         $modal.find('.modal-footer').slideDown();
     });
+});
+
+$('body').on('hidden.bs.modal', '.modal', function () {
+    $('.modal-body #message', $(this)).empty();
+    $(this).removeData('bs.modal');
 });

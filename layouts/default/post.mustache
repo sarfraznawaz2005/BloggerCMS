@@ -7,6 +7,8 @@
         <div class="col-md-8 main-content">
             <article>
                 <h3>{{post.title}}</h3>
+                <span class="glyphicon glyphicon-user"></span> {{post.author}}
+                &nbsp;&nbsp;
                 <span class="glyphicon glyphicon-time"></span> {{post.dated}}
                 <hr>
 
@@ -16,14 +18,14 @@
                 <div class="post-info">
                     {{#post.category}}
                         <span class="glyphicon glyphicon-folder-open"></span> &nbsp;
-                        <a href="{{settings.url}}/category/{{post.categoryslug}}.html">{{post.category}}</a>
+                        <a href="{{settings.url}}/category/{{post.categoryslug}}">{{post.category}}</a>
                         &nbsp;&nbsp;
                     {{/post.category}}
 
                     <span class="glyphicon glyphicon-bookmark"></span>
 
                     {{#post.tags}}
-                        <a href="{{settings.url}}/tag/{{.}}.html">{{.}}</a>&nbsp;&nbsp;
+                        <a href="{{settings.url}}/tag/{{.}}">{{.}}</a>&nbsp;&nbsp;
                     {{/post.tags}}
                 </div>
 
@@ -35,7 +37,8 @@
                     <a class="prevpost btn btn-primary"><i class="fa fa-chevron-circle-left"></i> Prev Post</a>
                 </div>
                 <div class="col-sm-4 col-md-4">
-                    <a class="btn btn-primary" href="{{settings.url}}/posts.html"><i class="fa fa-navicon"></i> View All Post</a>
+                    <a class="btn btn-primary" href="{{settings.url}}/posts.html"><i class="fa fa-navicon"></i> View All
+                        Post</a>
                 </div>
                 <div class="col-sm-4 col-md-4">
                     <a class="nextpost btn btn-primary"><i class="fa fa-chevron-circle-right"></i> Next Post</a>
@@ -43,29 +46,10 @@
             </div>
 
             <hr/>
-            <span class='st_facebook_large' displayText='Facebook'></span>
-            <span class='st_twitter_large' displayText='Tweet'></span>
-            <span class='st_pocket_large' displayText='Pocket'></span>
-            <span class='st_flipboard_large' displayText='Flipboard'></span>
-            <span class='st_googleplus_large' displayText='Google +'></span>
-            <span class='st_linkedin_large' displayText='LinkedIn'></span>
-            <span class='st_email_large' displayText='Email'></span>
-            <br/><br/>
-
+            
             <!-- Comment form -->
             <div class="well">
                 <div id="disqus_thread"></div>
-                <script type="text/javascript">
-                    var disqus_shortname = '{{settings.disqus}}'; // required: replace example with your forum shortname
-                    /* * * DON'T EDIT BELOW THIS LINE * * */
-                    (function () {
-                        var dsq = document.createElement('script');
-                        dsq.type = 'text/javascript';
-                        dsq.async = true;
-                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-                    })();
-                </script>
                 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">Comments
                     powered by Disqus.</a></noscript>
                 <a href="http://disqus.com" class="dsq-brlink">Comments powered by
@@ -78,17 +62,6 @@
 
     </div>
 </div>
-
-<!-- for sharethis -->
-<script type="text/javascript">var switchTo5x = true;</script>
-<script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
-<script type="text/javascript">stLight.options({
-    publisher: "18a13a28-cab8-4bb2-9a13-25708fa3cd9b",
-    doNotHash: false,
-    doNotCopy: false,
-    hashAddressBar: false
-});
-</script>
 
 {{> footer}}
 
@@ -105,6 +78,10 @@
         var pageArray = document.location.href.split('/');
         var currentPageSlug = pageArray[pageArray.length - 1];
 
+        if (!currentPageSlug) {
+            currentPageSlug = pageArray[pageArray.length - 2];
+        }
+
         $.ajax({
             url: __blogURL + "/data/blog.json",
             type: "GET",
@@ -112,7 +89,7 @@
             success: function (data) {
                 if (data.posts !== undefined && data.posts !== null) {
                     $.each(data.posts, function (i, post) {
-                        if (post.slug + '.html' === currentPageSlug) {
+                        if (post.slug === currentPageSlug || post.slug + '/' === currentPageSlug) {
 
                             var prevPost = data.posts[i - 1];
                             var nextPost = data.posts[i + 1];
@@ -122,7 +99,7 @@
                                 $prevPostSelector.hide();
                             }
                             else {
-                                $prevPostSelector.attr('href', __blogURL + '/post/' + prevPost.slug + '.html');
+                                $prevPostSelector.attr('href', __blogURL + '/post/' + prevPost.slug);
                             }
 
                             if (nextPost === undefined || nextPost === null) {
@@ -130,7 +107,7 @@
                                 $nextPostSelector.hide();
                             }
                             else {
-                                $nextPostSelector.attr('href', __blogURL + '/post/' + nextPost.slug + '.html');
+                                $nextPostSelector.attr('href', __blogURL + '/post/' + nextPost.slug);
                             }
 
                             return false; // break out of each
@@ -143,6 +120,14 @@
                 $nextPostSelector.hide();
             }
         });
+
+        // for Disqus
+        var disqus_shortname = '{{settings.disqus}}';
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 
     });
 </script>

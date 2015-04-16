@@ -32,8 +32,7 @@
                 <h4 style="margin: 0;"><i class="fa fa-paper-plane"></i> Generating Blog</h4>
             </div>
             <div class="modal-body text-center">
-                <span id="message"><i class="fa fa-circle-o-notch fa-spin"></i> Working, please
-                    wait...</span>
+                <span id="message"></span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i>

@@ -8,7 +8,7 @@
     <meta name="description" content="{{settings.tagline}}">
     <meta name="author" content="{{settings.author}}">
 
-    <title>{{settings.title}}</title>
+    <title>{{#post.title}}{{.}} :: {{/post.title}}{{#page.title}}{{.}} :: {{/page.title}}{{settings.title}}</title>
 
     <!-- rss feed url -->
     <link rel="alternate" type="application/rss+xml" title="{{settings.title}}" href="{{settings.url}}/rss.xml"/>
@@ -21,9 +21,12 @@
     <link href="{{settings.url}}/js/plugins/bootstrap-3.0.3/css/{{settings.theme}}" rel="stylesheet"/>
     <link href="{{settings.url}}/js/plugins/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{{settings.url}}/js/plugins/bootstrap-3.0.3/plugins/social-buttons.css" rel="stylesheet"/>
-    
+
     <!-- syntax highlighter css file -->
-    <link href="{{settings.url}}/js/plugins/highlight/styles/railscasts.css" rel="stylesheet" />    
+    <link href="{{settings.url}}/js/plugins/highlight/styles/github.css" rel="stylesheet"/>
+
+    <!-- lightbox for images -->
+    <link href="{{settings.url}}/js/plugins/lightbox/ekko-lightbox.min.css" rel="stylesheet"/>
 
     <!-- blog custom CSS file -->
     <link href="{{settings.url}}/css/style.css" rel="stylesheet"/>

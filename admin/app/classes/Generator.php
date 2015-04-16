@@ -231,7 +231,7 @@ class Generate
     protected function generatePostPageFiles($mustache, $data, $type)
     {
         if (!file_exists($this->publicDir . $type) && !mkdir($this->publicDir . $type)) {
-            echo "Error: could not make $type directly in public folder";
+            echo "Error: could not make $type directory in public folder";
             exit;
         }
 
@@ -243,9 +243,17 @@ class Generate
             $template = $mustache->loadTemplate($type);
             $html = $template->render($data);
 
-            if (file_put_contents($pagesDir . $item['slug'] . '.html', $html)) {
+            // create new folder for this page/post
+            $folderPath = $this->publicDir . $type . '/' . $item['slug'];
+
+            if (!file_exists($folderPath) && !mkdir($folderPath)) {
+                echo "Error: could not make $folderPath directory";
+                exit;
+            }
+
+            if (file_put_contents($folderPath . '/index.html', $html)) {
                 // add to generate log
-                $this->generateLog[$type . 's'][] = $item['slug'] . '.html';
+                $this->generateLog[$type . 's'][] = $folderPath . '/index.html';
             }
 
         }
@@ -256,7 +264,7 @@ class Generate
     protected function generateCategoryTagFiles($mustache, $data, $type)
     {
         if (!file_exists($this->publicDir . $type) && !mkdir($this->publicDir . $type)) {
-            echo "Error: could not make $type directly in public folder";
+            echo "Error: could not make $type directory in public folder";
             exit;
         }
 
@@ -280,9 +288,15 @@ class Generate
 
                 $fileName = getSlugName($item['category']);
 
-                if (file_put_contents($itemRootDir . "/$fileName.html", $html)) {
+                $folderPath = $itemRootDir . $fileName;
+                if (!file_exists($folderPath) && !mkdir($folderPath)) {
+                    echo "Error: could not make $folderPath directory";
+                    exit;
+                }
+
+                if (file_put_contents($folderPath . "/index.html", $html)) {
                     // add to generate log
-                    $this->generateLog['categories'][] = "$fileName.html";
+                    $this->generateLog['categories'][] = $folderPath . "/index.html";
                 }
             }
         } else {
@@ -314,9 +328,15 @@ class Generate
 
                 $fileName = getSlugName($item);
 
-                if (file_put_contents($itemRootDir . "/$fileName.html", $html)) {
+                $folderPath = $itemRootDir . $fileName;
+                if (!file_exists($folderPath) && !mkdir($folderPath)) {
+                    echo "Error: could not make $folderPath directory";
+                    exit;
+                }
+
+                if (file_put_contents($folderPath . "/index.html", $html)) {
                     // add to generate log
-                    $this->generateLog['tags'][] = "$fileName.html";
+                    $this->generateLog['tags'][] = $folderPath . "/index.html";
                 }
             }
         }
@@ -339,7 +359,7 @@ class Generate
             $size = $minFontSize + ($count - $minimumCount)
                * ($maxFontSize - $minFontSize) / $spread;
             $cloudTags[] = '<a style="font-size: ' . floor($size) . 'px'
-               . '" class="tag_cloud" href="' . $base . '/tag/' . strtolower($tag) . '.html'
+               . '" class="tag_cloud" href="' . $base . '/tag/' . strtolower($tag)
                . '" title="\'' . $tag . '\' returned a count of ' . $count . '">'
                . htmlspecialchars(stripslashes($tag)) . '</a>';
         }
@@ -396,7 +416,7 @@ class Generate
     protected function generateArchiveFiles($mustache, $data)
     {
         if (!file_exists($this->publicDir . 'archive') && !mkdir($this->publicDir . 'archive')) {
-            echo "Error: could not make archives directly in public folder";
+            echo "Error: could not make archives directory in public folder";
             exit;
         }
 
@@ -406,7 +426,7 @@ class Generate
             $archiveName = getSlugName(date('F Y', strtotime($post['dated'])));
 
             if (!file_exists($archivesDir . $archiveName) && !mkdir($archivesDir . $archiveName)) {
-                echo "Error: could not make $archiveName directly in public folder";
+                echo "Error: could not make $archiveName directory in public folder";
                 exit;
             }
 
@@ -424,7 +444,7 @@ class Generate
 
                 if (file_put_contents($archivesDir . $archiveName . "/index.html", $html)) {
                     // add to generate log
-                    $this->generateLog['arhives'][] = $archiveName . "/index.html";
+                    $this->generateLog['arhives'][] = $archivesDir . $archiveName . "/index.html";
                 }
             }
         }
@@ -447,7 +467,7 @@ class Generate
             $rssfeed .= '<description><![CDATA[' . $post['body'] . ']]></description>' . $newline;
             $rssfeed .= '<link>' . $data['settings']['url'] . '/post/' . getSlugName(
                   $post['title']
-               ) . '.html</link>' . $newline;
+               ) . '</link>' . $newline;
             $rssfeed .= '<pubDate>' . date("D, d M Y H:i:s O", strtotime($post['dated'])) . '</pubDate>' . $newline;
             $rssfeed .= '</item>' . $newline;
         }
@@ -475,7 +495,7 @@ SITEMAP;
         foreach ($data['posts'] as $post) {
             $postURL = $data['settings']['url'];
             $postURL = rtrim($postURL, '/');
-            $postURL .= '/post/' . getSlugName($post['title']) . '.html';
+            $postURL .= '/post/' . getSlugName($post['title']);
 
             $datetime = new DateTime($post['dated']);
             $lastmod = $datetime->format('Y-m-d\TH:i:sP');
@@ -492,7 +512,7 @@ SITEMAP;
         foreach ($data['pages'] as $page) {
             $pageURL = $data['settings']['url'];
             $pageURL = rtrim($pageURL, '/');
-            $pageURL .= '/page/' . getSlugName($page['title']) . '.html';
+            $pageURL .= '/page/' . getSlugName($page['title']);
 
             $sitemap .= '<url>' . $newline;
             $sitemap .= '<loc>' . $pageURL . '/</loc>' . $newline;
@@ -577,6 +597,9 @@ SITEMAP;
         $output .= '<strong>Categories:</strong><br>' . implode('<br>', $categories) . '<hr>';
         $output .= '<strong>Tags:</strong><br>' . implode('<br>', $tags) . '<hr>';
         $output .= '<strong>Archives:</strong><br>' . implode('<br>', $arhives);
+
+        // remove ../ from ../public/....
+        $output = str_replace('../public/', 'public/', $output);
 
         @file_put_contents('genlog.html', $output);
     }

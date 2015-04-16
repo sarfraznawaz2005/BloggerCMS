@@ -38,6 +38,7 @@ class Post
     private $metaFile = 'data/posts.json';
     private $categoriesFile = 'data/categories.json';
     private $tagsFile = 'data/tags.json';
+    private $settingsFile = 'data/settings.json';
 
     public function getAdd()
     {
@@ -47,7 +48,9 @@ class Post
         sort($data['categories']);
         $data['tags'] = MetaDataWriter::getFileData($this->tagsFile);
         sort($data['tags']);
-        //pretty_print($data, 0);
+
+        $setttings = MetaDataWriter::getFileData($this->settingsFile);
+        $data['author'] = $setttings['author'];
 
         $app->render('addpost.php', array('title' => 'Add Post', 'data' => $data));
     }
@@ -78,6 +81,15 @@ class Post
         $post['summary'] = $this->getSummary($post['body'], 300);
 
         MetaDataWriter::updateFileData($this->metaFile, $post, true);
+
+        // update categories
+        $array[] = MetaDataWriter::getFileData($this->categoriesFile);
+        $array[] = $post['category'];
+
+        $array = arrayFlatten($array);
+        $array = array_unique($array);
+
+        MetaDataWriter::writeData($this->categoriesFile, $array);
 
         // also write tags file
         $array[] = MetaDataWriter::getFileData($this->tagsFile);
@@ -181,6 +193,15 @@ class Post
         $data[$id]['summary'] = $this->getSummary($post['body'], 300);
 
         MetaDataWriter::writeData($this->metaFile, $data);
+
+        // update categories
+        $array[] = MetaDataWriter::getFileData($this->categoriesFile);
+        $array[] = $post['category'];
+
+        $array = arrayFlatten($array);
+        $array = array_unique($array);
+
+        MetaDataWriter::writeData($this->categoriesFile, $array);
 
         // also write tags file
         $array[] = MetaDataWriter::getFileData($this->tagsFile);

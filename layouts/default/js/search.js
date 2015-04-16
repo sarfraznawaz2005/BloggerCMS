@@ -40,7 +40,7 @@ $(function () {
                         slug = slug.replace(/\s+/g, '-');
 
                         if (slug) {
-                            foundPosts += '<h3><a href="' + data.settings.url + '/post/' + slug + '.html">' + post.title + '</a></h3><hr>';
+                            foundPosts += '<h3><a href="' + data.settings.url + '/post/' + slug + '">' + post.title + '</a></h3><hr>';
                         }
                     }
                 });

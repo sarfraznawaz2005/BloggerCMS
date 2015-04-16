@@ -11,7 +11,7 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a href="{{settings.url}}/index.html" class="navbar-brand">{{settings.title}}</a>
+            <a href="{{settings.url}}" class="navbar-brand"><i class="fa fa-code"></i> {{settings.title}}</a>
         </div>
 
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
@@ -27,10 +27,10 @@
 
             <ul class="nav navbar-nav page-links">
                 {{#pages}}
-                    <li><a href="{{settings.url}}/page/{{slug}}.html">{{title}}</a></li>
+                    <li><a href="{{settings.url}}/page/{{slug}}">{{title}}</a></li>
                 {{/pages}}
             </ul>
-            
+
         </nav>
     </div>
 </header>
