@@ -13,10 +13,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header"><?php echo $title; ?></h1>
+                <?php require_once 'includes/line.php' ?>
 
                 <div class="content">
-                    <?php echo $flash['info']; ?>
-
                     <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                         <li class="active"><a href="#settings" data-toggle="tab"><i class="fa fa-cog"></i>
                                 General Settings</a></li>

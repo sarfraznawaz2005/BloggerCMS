@@ -17,8 +17,6 @@
                 <?php require_once 'includes/line.php' ?>
 
                 <div class="content">
-                    <?php echo $flash['info']; ?>
-
                     <form action="<?php echo $root; ?>/update_category/<?php echo $id; ?>" class="form-horizontal" method="post">
                         <div class="row">
                             <div class="form-group col-lg-12">

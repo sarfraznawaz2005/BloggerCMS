@@ -18,8 +18,6 @@
                 <?php require_once 'includes/line.php' ?>
 
                 <div class="content">
-                    <?php echo $flash['info']; ?>
-
                     <form enctype="multipart/form-data" action="<?php echo $root; ?>/add_image" class="form-horizontal" method="post">
                         <div class="row">
                             <div class="form-group col-lg-12">

@@ -16,8 +16,6 @@
                 <?php require_once 'includes/line.php' ?>
 
                 <div class="content">
-                    <?php echo $flash['info']; ?>
-
                     <?php echo $content; ?>
                 </div>
             </div>

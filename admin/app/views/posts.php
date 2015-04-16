@@ -16,8 +16,6 @@
                 <?php require_once 'includes/line.php' ?>
 
                 <div class="content">
-                    <?php echo $flash['info']; ?>
-
                     <a href="<?php echo $root; ?>/get_addpost" class="btn btn-primary">Add Post</a>
                     <br/><br/>
 
