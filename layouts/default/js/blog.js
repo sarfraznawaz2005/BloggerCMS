@@ -10,6 +10,10 @@ $(function () {
     var pageArray = document.location.href.split('/');
     var page = pageArray[pageArray.length - 1];
 
+    if (!page) {
+        page = pageArray[pageArray.length - 2];
+    }
+
     $('.page-links a').each(function () {
         var linkArray = this.href.split('/');
         var link = linkArray[linkArray.length - 1];
