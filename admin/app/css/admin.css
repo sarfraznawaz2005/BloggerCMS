@@ -6,6 +6,10 @@ body {
     width: 100%;
 }
 
+#genlog {
+    display: none;
+}
+
 #page-wrapper {
     padding: 0 15px;
     min-height: 568px;

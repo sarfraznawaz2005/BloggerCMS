@@ -121,12 +121,10 @@ class Generate
         // copy data folder too
         $this->copy_directory('data', '../public/data');
 
-        // write generate log
-        $this->writeGenerateLog($this->generateLog);
-
         $message = '';
         $message .= 'Blog has been generated in <strong>public</strong> folder :)<br><br>';
-        $message .= '<a class="btn btn-primary" target="_blank" href="' . $this->publicDir . 'genlog.html">View Log</a>';
+        $message .= '<a id="viewGenLog" class="btn btn-primary">View Log</a><br><br>';
+        $message .= '<div id="genlog">' . $this->getGenerateLog($this->generateLog) . '</div>';
         echo $message;
     }
 
@@ -562,9 +560,9 @@ SITEMAP;
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
                     if (filetype($dir . "/" . $object) == "dir") {
-                        rrmdir($dir . "/" . $object);
+                        @rrmdir($dir . "/" . $object);
                     } else {
-                        unlink($dir . "/" . $object);
+                        @unlink($dir . "/" . $object);
                     }
                 }
             }
@@ -573,7 +571,7 @@ SITEMAP;
         }
     }
 
-    protected function writeGenerateLog(array $generateLog)
+    protected function getGenerateLog(array $generateLog)
     {
         $output = '';
 
@@ -598,9 +596,8 @@ SITEMAP;
         $output .= '<strong>Tags:</strong><br>' . implode('<br>', $tags) . '<hr>';
         $output .= '<strong>Archives:</strong><br>' . implode('<br>', $arhives);
 
-        // remove ../ from ../public/....
         $output = str_replace('../public/', 'public/', $output);
 
-        @file_put_contents($this->publicDir . 'genlog.html', $output);
+        return $output;
     }
 }

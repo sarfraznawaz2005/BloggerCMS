@@ -55,3 +55,8 @@ $('body').on('hidden.bs.modal', '.modal', function () {
     $('.modal-body #message', $(this)).empty();
     $(this).removeData('bs.modal');
 });
+
+// view generate log
+$('body').on('click', '#viewGenLog', function () {
+    $('#genlog').slideToggle();
+});
