@@ -126,7 +126,7 @@ class Generate
 
         $message = '';
         $message .= 'Blog has been generated in <strong>public</strong> folder :)<br><br>';
-        $message .= '<a class="btn btn-primary" target="_blank" href="genlog.html">View Log</a>';
+        $message .= '<a class="btn btn-primary" target="_blank" href="' . $this->publicDir . 'genlog.html">View Log</a>';
         echo $message;
     }
 
@@ -601,6 +601,6 @@ SITEMAP;
         // remove ../ from ../public/....
         $output = str_replace('../public/', 'public/', $output);
 
-        @file_put_contents('genlog.html', $output);
+        @file_put_contents($this->publicDir . 'genlog.html', $output);
     }
 }
