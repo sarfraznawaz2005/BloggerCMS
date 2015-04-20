@@ -367,10 +367,19 @@ class Post
         $html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
         $html = mb_substr($html, 0, $maxChars, 'UTF-8') . '...';
 
-        // fix broken tags
+        // fix broken tags //
+        
+        // suppress DOM parsing errors
+        libxml_use_internal_errors(TRUE);
+        // avoid strict error checking
+
         $dom = new DOMDocument;
+        $dom->strictErrorChecking = FALSE;
+        
         $dom->loadHTML($html);
-        $summary = $dom->saveXML();
+        $summary = $dom->saveHTML();
+        
+        $summary = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace( array('<html>', '</html>', '<body>', '</body>'), array('', '', '', ''), $summary));        
 
         return $summary;
     }
