@@ -27,7 +27,7 @@ $(function () {
     $('[data-toggle=tooltip]').tooltip();
 
     // lightbox for all images + make them responsive
-    $('.post-content > img, .page-content > img').each(function () {
+    $('.main-content > img').each(function () {
         var src = this.src;
         $(this).addClass('img-responsive');
         $(this).wrap('<a data-toggle="lightbox" href="' + src + '"></a>');
