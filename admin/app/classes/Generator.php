@@ -60,16 +60,6 @@ class Generate
         // first copy all contents of template to public folder
         $this->copy_directory($layoutDir, $this->publicDir);
 
-        // delete mustache particals folders from public folder
-        $this->rrmdir($this->publicDir . 'partials/');
-
-        // delete *.mustache from public dir
-        $mustacheFiles = glob($this->publicDir . '/*.mustache');
-
-        foreach ($mustacheFiles as $mustacheFile) {
-            @unlink($mustacheFile);
-        }
-
         // now create actual html pages
         $mustache = new Mustache_Engine(
            array(
@@ -80,17 +70,20 @@ class Generate
 
         $mustacheFiles = glob($layoutDir . '/*.mustache');
 
+        $excludedFiles = array(
+           'category',
+           'post',
+           'page',
+           'archive',
+           'tag',
+        );
+
         foreach ($mustacheFiles as $mustacheFile) {
             $fileName = basename($mustacheFile);
             $fileName = str_replace('.mustache', '', $fileName);
 
             // we will generate these later
-            if ($fileName === 'category' ||
-               $fileName === 'post' ||
-               $fileName === 'page' ||
-               $fileName === 'archive' ||
-               $fileName === 'tag'
-            ) {
+            if (true === in_array($fileName, $excludedFiles)) {
                 continue;
             }
 
@@ -98,6 +91,16 @@ class Generate
             $html = $template->render($data);
 
             file_put_contents($this->publicDir . $fileName . '.html', $html);
+        }
+
+        // delete mustache particals folders from public folder
+        $this->rrmdir($this->publicDir . 'partials/');
+
+        // delete *.mustache from public dir
+        $mustacheFiles = glob($this->publicDir . '/*.mustache');
+
+        foreach ($mustacheFiles as $mustacheFile) {
+            @unlink($mustacheFile);
         }
 
         // generate post files
@@ -125,6 +128,7 @@ class Generate
         $message .= 'Blog has been generated in <strong>public</strong> folder :)<br><br>';
         $message .= '<a id="viewGenLog" class="btn btn-primary">View Log</a><br><br>';
         $message .= '<div id="genlog">' . $this->getGenerateLog($this->generateLog) . '</div>';
+
         echo $message;
     }
 
@@ -152,39 +156,31 @@ class Generate
             $data['posts'][] = $post;
         }
 
+        $dates = array();
+        $addedCategories = array();
+        $categories = array();
+        $tagsCloud = array();
+
         foreach ($data['posts'] as $key => $post) {
             // convert posts markdown to html
             $data['posts'][$key]['body'] = $this->parser->text($post['body']);
             // see whether to show full posts body or just titles
             $data['posts'][$key]['showbody'] = '1';
-        }
 
-        // convert pages markdown to html
-        foreach ($data['pages'] as $key => $page) {
-            $data['pages'][$key]['body'] = $this->parser->text($page['body']);
-        }
+            $dates[] = strtotime($post['dated']);
 
-        // sort posts by latest first
-        $dates = array();
-        foreach ($data['posts'] as $key => $value) {
-            $dates[] = strtotime($value['dated']);
-        }
-
-        array_multisort($dates, SORT_DESC, $data['posts']);
-
-        // categories
-        $addedCategories = array();
-        $categories = array();
-        foreach ($data['posts'] as $post) {
+            // categories
             if (false === in_array($post['category'], $addedCategories)) {
                 $categories[] = array('category' => $post['category'], 'categoryslug' => $post['categoryslug']);
                 $addedCategories[] = $post['category'];
             }
+
+            // tags
+            $tagsCloud[] = $post['tags'];
         }
 
-        sort($categories);
-        $data['categories'] = $categories;
-        //pretty_print($data);
+        // sort posts by latest first
+        array_multisort($dates, SORT_DESC, $data['posts']);
 
         // for latest posts - show 5 max
         $data['latestPosts'] = array_slice($data['posts'], 0, 5);
@@ -193,16 +189,12 @@ class Generate
         //$countHomePosts = $data['settings']['number_posts'] ?: 10;
         $data['homePosts'] = array_slice($data['posts'], 0, 1);
 
-        // generate tags cloud
-        $tagsCloud = '';
-        foreach ($data['posts'] as $post) {
-            foreach ($post['tags'] as $tag) {
-                $tagsCloud .= $tag . ',';
-            }
-        }
+        // sort categories
+        sort($categories);
+        $data['categories'] = $categories;
 
-        // sort tags
-        $tagsCloud = explode(',', $tagsCloud);
+        // generate tags cloud
+        $tagsCloud = arrayFlatten($tagsCloud);
         natcasesort($tagsCloud);
         $tagsCloud = implode(',', $tagsCloud);
 
@@ -216,6 +208,11 @@ class Generate
         }
 
         $data['tagsCloud'] = $this->generateTagCloud($tagFreq);
+
+        // convert pages markdown to html
+        foreach ($data['pages'] as $key => $page) {
+            $data['pages'][$key]['body'] = $this->parser->text($page['body']);
+        }
 
         // generate archives
         $data['archives'] = $this->generateArchives($data['posts']);
@@ -233,9 +230,7 @@ class Generate
             exit;
         }
 
-        $pagesDir = $this->publicDir . $type . '/';
-
-        foreach ($data[$type . 's'] as $key => &$item) {
+        foreach ($data[$type . 's'] as $key => $item) {
             $data[$type] = $item;
 
             $template = $mustache->loadTemplate($type);
@@ -287,6 +282,7 @@ class Generate
                 $fileName = getSlugName($item['category']);
 
                 $folderPath = $itemRootDir . $fileName;
+
                 if (!file_exists($folderPath) && !mkdir($folderPath)) {
                     echo "Error: could not make $folderPath directory";
                     exit;
@@ -327,6 +323,7 @@ class Generate
                 $fileName = getSlugName($item);
 
                 $folderPath = $itemRootDir . $fileName;
+
                 if (!file_exists($folderPath) && !mkdir($folderPath)) {
                     echo "Error: could not make $folderPath directory";
                     exit;
@@ -344,6 +341,7 @@ class Generate
     {
         $minimumCount = min(array_values($data));
         $maximumCount = max(array_values($data));
+
         $spread = $maximumCount - $minimumCount;
         $cloudTags = array();
 
@@ -371,6 +369,10 @@ class Generate
         $datesSorted = array();
 
         foreach ($posts as $post) {
+            if (! $post['title']) {
+                continue;
+            }
+
             $key = date('yyyy-mm-dd', strtotime($post['dated']));
             $datesSorted[$key] = date('F Y', strtotime($post['dated']));
         }
@@ -420,32 +422,34 @@ class Generate
 
         $archivesDir = $this->publicDir . 'archive/';
 
-        foreach ($data['posts'] as $post) {
-            $archiveName = getSlugName(date('F Y', strtotime($post['dated'])));
+        $archivesData = array();
+        foreach ($data['posts'] as $postItem) {
+            if (! trim($postItem['dated'])) {
+                continue;
+            }
+
+            $archiveName = getSlugName(date('F Y', strtotime($postItem['dated'])));
 
             if (!file_exists($archivesDir . $archiveName) && !mkdir($archivesDir . $archiveName)) {
                 echo "Error: could not make $archiveName directory in public folder";
                 exit;
             }
 
-            $archivesData = array();
-            foreach ($data['posts'] as $postItem) {
-                if ($archiveName === getSlugName(date('F Y', strtotime($postItem['dated'])))) {
-                    $archivesData[] = $postItem;
-                }
+            if ($archiveName === getSlugName(date('F Y', strtotime($postItem['dated'])))) {
+                $archivesData[] = $postItem;
+            }
 
-                $data['archivePosts'] = $archivesData;
+            $data['archivePosts'] = $archivesData;
 
+            $template = $mustache->loadTemplate('archive');
+            $html = $template->render($data);
 
-                $template = $mustache->loadTemplate('archive');
-                $html = $template->render($data);
-
-                if (file_put_contents($archivesDir . $archiveName . "/index.html", $html)) {
-                    // add to generate log
-                    $this->generateLog['arhives'][] = $archivesDir . $archiveName . "/index.html";
-                }
+            if (file_put_contents($archivesDir . $archiveName . "/index.html", $html)) {
+                // add to generate log
+                $this->generateLog['arhives'][] = $archivesDir . $archiveName . "/index.html";
             }
         }
+
     }
 
     protected function generateRSS($data)
