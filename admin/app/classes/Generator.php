@@ -118,8 +118,8 @@ class Generate
         // generate sitemap.xml
         $this->generateSitemap($data);
 
-        // copy data folder too
-        $this->copy_directory('data', '../public/data');
+        // copy blog data file
+        copy('data/blog.json', '../public/data/blog.json');
 
         $message = '';
         $message .= 'Blog has been generated in <strong>public</strong> folder :)<br><br>';
@@ -358,7 +358,7 @@ class Generate
                * ($maxFontSize - $minFontSize) / $spread;
             $cloudTags[] = '<a style="font-size: ' . floor($size) . 'px'
                . '" class="tag_cloud" href="' . $base . '/tag/' . strtolower($tag)
-               . '" title="\'' . $tag . '\' returned a count of ' . $count . '">'
+               . '" title="' . ++ $count . ' total posts" data-original-title="' . ++ $count . ' total posts" data-toggle="tooltip">'
                . htmlspecialchars(stripslashes($tag)) . '</a>';
         }
 
