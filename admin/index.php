@@ -37,6 +37,9 @@ require_once 'vendor/autoload.php';
 // website configuration file
 require_once 'config.php';
 
+// set default timezone
+date_default_timezone_set('Asia/Karachi');
+
 // set error reporting
 if ($config['mode'] === 'development') {
     ini_set('display_errors', true);

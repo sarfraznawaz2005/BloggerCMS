@@ -218,6 +218,10 @@ class Generate
         $data['archives'] = $this->generateArchives($data['posts']);
 
         // write whole blog data to file
+        if (!file_exists($this->publicDir . 'data')) {
+          mkdir($this->publicDir . 'data');
+        }
+        
         MetaDataWriter::writeData($this->metaFile, $data);
 
         return $data;
