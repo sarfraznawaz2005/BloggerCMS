@@ -426,24 +426,34 @@ class Generate
 
         $archivesDir = $this->publicDir . 'archive/';
 
-        $archivesData = array();
+        $archiveNames = array();
         foreach ($data['posts'] as $postItem) {
-            if (! trim($postItem['dated'])) {
-                continue;
+            $archiveNames[] = getSlugName(date('F Y', strtotime($postItem['dated'])));
+        }
+
+        foreach ($archiveNames as $archiveName) {
+            $archiveNames[] = getSlugName(date('F Y', strtotime($postItem['dated'])));
+
+            $archivesData = array();
+            foreach ($data['posts'] as $postItem) {
+                if (!trim($postItem['dated'])) {
+                    continue;
+                }
+
+                $postArchiveName = getSlugName(date('F Y', strtotime($postItem['dated'])));
+
+                if (!file_exists($archivesDir . $archiveName) && !mkdir($archivesDir . $archiveName)) {
+                    echo "Error: could not make $archiveName directory in public folder";
+                    exit;
+                }
+
+                if ($archiveName === $postArchiveName) {
+                    $archivesData[] = $postItem;
+
+                    $data['archivePosts'] = $archivesData;
+                }
+
             }
-
-            $archiveName = getSlugName(date('F Y', strtotime($postItem['dated'])));
-
-            if (!file_exists($archivesDir . $archiveName) && !mkdir($archivesDir . $archiveName)) {
-                echo "Error: could not make $archiveName directory in public folder";
-                exit;
-            }
-
-            if ($archiveName === getSlugName(date('F Y', strtotime($postItem['dated'])))) {
-                $archivesData[] = $postItem;
-            }
-
-            $data['archivePosts'] = $archivesData;
 
             $template = $mustache->loadTemplate('archive');
             $html = $template->render($data);
