@@ -20,6 +20,6 @@
         "camspiers/json-pretty": "1.0.*"        
     },
     "autoload": {
-        "classmap": ["admin/app/classes"]
+        "classmap": ["app/classes"]
     }
 }

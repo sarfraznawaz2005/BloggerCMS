@@ -32,7 +32,7 @@
 session_start();
 
 // autoload dependencies automatically via magical composer autoload
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 // website configuration file
 require_once 'config.php';
