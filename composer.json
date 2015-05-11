@@ -1,26 +1,46 @@
 {
-    "name": "sarfraznawaz2005/bloggercms",
-    "description": "An static blog generator via provided interface.",
-    "keywords": ["blog", "static", "generator"],
-    "homepage": "https://github.com/sarfraznawaz2005/BloggerCMS",
-    "type": "package",
-    "license": "MIT",
-    "authors": [
+    "repositories": [
         {
-            "name": "Sarfraz Ahmed",
-            "email": "sarfraznawaz2005@gmail.com",
-            "homepage": "https://codeinphp.github.io/"
+            "type": "package",
+            
+            "package": {
+                
+                    "name": "sarfraznawaz2005/bloggercms",
+                    "description": "An static blog generator via provided interface.",
+                    "keywords": ["blog", "static", "generator"],
+                    "homepage": "https://github.com/sarfraznawaz2005/BloggerCMS",
+                    "type": "package",
+                    "license": "MIT",
+                    "authors": [
+                        {
+                            "name": "Sarfraz Ahmed",
+                            "email": "sarfraznawaz2005@gmail.com",
+                            "homepage": "https://codeinphp.github.io/"
+                        }
+                    ],
+                
+                "version": "dev-master",
+                
+                "source": {
+                    "url": "git@github.com:sarfraznawaz2005/BloggerCMS.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                
+                "autoload": {
+                    "psr-0": { "BloggerCMS": "app" },
+                    "files": ["files/functions.php"]
+                }
+            }
         }
     ],
+    
     "require": {
         "php": ">=5.3.0",
         "slim/slim": "2.*",
         "mustache/mustache": "~2.5",
         "camspiers/json-pretty": "1.0.*",
         "erusev/parsedown": "~1.5"
-    },
-    "autoload": {
-        "psr-0": { "BloggerCMS": "app" },
-        "files": ["files/functions.php"]
     }
+
 }
