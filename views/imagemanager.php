@@ -3,7 +3,7 @@
 <head>
     <?php require_once 'includes/head.php' ?>
 
-    <link href="<?php echo $root; ?>/app/js/plugins/lightbox/ekko-lightbox.min.css" rel="stylesheet">
+    <link href="<?php echo $root; ?>/assets/js/plugins/lightbox/ekko-lightbox.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -72,7 +72,7 @@
 
 <?php require_once 'includes/foot.php' ?>
 
-<script src="<?php echo $root; ?>/app/js/plugins/lightbox/ekko-lightbox.min.js"></script>
+<script src="<?php echo $root; ?>/assets/js/plugins/lightbox/ekko-lightbox.min.js"></script>
 
 <script>
     $(document).delegate('*[data-toggle="lightbox"]', 'click', function (event) {
