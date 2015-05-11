@@ -3,7 +3,7 @@
     "description": "An static blog generator via provided interface.",
     "keywords": ["blog", "static", "generator"],
     "homepage": "https://github.com/sarfraznawaz2005/BloggerCMS",
-    "type": "library",
+    "type": "package",
     "license": "MIT",
     "authors": [
         {
