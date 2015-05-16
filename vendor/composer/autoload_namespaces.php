@@ -10,5 +10,5 @@ return array(
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
     'Mustache' => array($vendorDir . '/mustache/mustache/src'),
     'Camspiers' => array($vendorDir . '/camspiers/json-pretty/src'),
-    'BloggerCMS' => array($baseDir . '/app'),
+    'BloggerCMS' => array($baseDir . '/src'),
 );

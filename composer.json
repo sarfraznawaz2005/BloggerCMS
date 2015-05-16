@@ -24,7 +24,7 @@
     },
     
     "autoload": {
-        "psr-0": { "BloggerCMS": "app" },
+        "psr-0": { "BloggerCMS": "src/" },
         "files": ["files/functions.php"]
     },
     

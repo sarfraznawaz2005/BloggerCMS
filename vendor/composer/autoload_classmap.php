@@ -6,6 +6,15 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'BloggerCMS\\Category' => $baseDir . '/src/BloggerCMS/Category.php',
+    'BloggerCMS\\Crud' => $baseDir . '/src/BloggerCMS/Crud.php',
+    'BloggerCMS\\Generator' => $baseDir . '/src/BloggerCMS/Generator.php',
+    'BloggerCMS\\Image' => $baseDir . '/src/BloggerCMS/Image.php',
+    'BloggerCMS\\MetaDataWriter' => $baseDir . '/src/BloggerCMS/MetaDataWriter.php',
+    'BloggerCMS\\Page' => $baseDir . '/src/BloggerCMS/Page.php',
+    'BloggerCMS\\Post' => $baseDir . '/src/BloggerCMS/Post.php',
+    'BloggerCMS\\Setting' => $baseDir . '/src/BloggerCMS/Setting.php',
+    'BloggerCMS\\Tag' => $baseDir . '/src/BloggerCMS/Tag.php',
     'Camspiers\\JsonPretty\\JsonPretty' => $vendorDir . '/camspiers/json-pretty/src/Camspiers/JsonPretty/JsonPretty.php',
     'Mustache_Autoloader' => $vendorDir . '/mustache/mustache/src/Mustache/Autoloader.php',
     'Mustache_Cache' => $vendorDir . '/mustache/mustache/src/Mustache/Cache.php',

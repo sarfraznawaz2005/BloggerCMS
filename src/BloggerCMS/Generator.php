@@ -219,9 +219,9 @@ class Generator
 
         // write whole blog data to file
         if (!file_exists($this->publicDir . 'data')) {
-          mkdir($this->publicDir . 'data');
+            mkdir($this->publicDir . 'data');
         }
-        
+
         MetaDataWriter::writeData($this->metaFile, $data);
 
         return $data;
@@ -373,7 +373,7 @@ class Generator
         $datesSorted = array();
 
         foreach ($posts as $post) {
-            if (! $post['title']) {
+            if (!$post['title']) {
                 continue;
             }
 
