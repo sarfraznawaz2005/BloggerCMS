@@ -26,7 +26,5 @@
     "autoload": {
         "psr-0": { "BloggerCMS": "src/" },
         "files": ["files/functions.php"]
-    },
-    
-     "minimum-stability": "stable"
+    }
 }
