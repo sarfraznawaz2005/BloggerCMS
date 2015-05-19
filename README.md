@@ -42,6 +42,12 @@ BloggerCMS comes with fully responsive blog template based on famous [Twitter Bo
 > module activated. If you want to run BloggerCMS on your local computer,
 > you can go for [XAMPP][8].
 
+**Via Composer:**
+
+`composer create-project -n -s dev sarfraznawaz2005/bloggercms`
+
+**Manually:**
+
  1. Download BloggerCMS either by clonning it's repository or [direct download][9].
  2. Move the files to your web root folder usually named **www** or **htdocs**
  3. Visit the BloggerCMS url. If you have installed it locally, it's url will be like **http://localhost/BloggerCMS** assuming folder name is **BloggerCMS**
