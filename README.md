@@ -69,7 +69,7 @@ Please feel free to fork and modify/extend BloggerCMS and send a pull request wi
 
 The author has put in efforts so that BloggerCMS is the *easiest* blog generator out there and can be used *freely*. Any donation made will be extremely supportive.
 
-In order to donate, please go to [this page][14] and input email address **sarfraznawaz2005@hotmail.com** and proceed with your donation information. Thanks!
+In order to donate, please go to [this page][14] and input email address sarfraznawaz2005@hotmail.com and proceed with your donation information. Thanks!
 
 ## License ##
 
