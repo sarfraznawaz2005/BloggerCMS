@@ -65,20 +65,17 @@ See [Official BloggerCMS Blog][10] to learn more about it and its tutorials.
 
 Please feel free to fork and modify/extend BloggerCMS and send a pull request with your changes! To establish a consistent code quality, please check your code using [PHP_CodeSniffer][12]. If you find any bug, error or issue, please report it at [issue tracker][13].
 
-## Thanks ##
+## Donation?##
 
-Thanks to these open source projects that are used in BloggerCMS:
+The author has put in efforts so that BloggerCMS is the *easiest* blog generator out there and can be used *freely*. Any donation made will be extremely supportive.
 
- 1. [json-pretty][14] for formatting json in human readable format
- 2. [parsedown][15], an awesome Markdown parser for PHP
- 3. [mustache][16], excellent template engine used to create layouts for the blog
- 4. [slim framework][17], nice and fast php framework
+In order to donate, please go to [this page][14] and input email address **sarfraznawaz2005@hotmail.com** and proceed with your donation information. Thanks!
 
 ## License ##
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Sarfraz Ahmed  and [Contributors][18]
+Copyright (c) 2015 Sarfraz Ahmed  and [Contributors][15]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -112,8 +109,5 @@ SOFTWARE.
   [11]: https://bloggercms.github.io/page/get-started.html
   [12]: https://github.com/squizlabs/PHP_CodeSniffer
   [13]: https://github.com/sarfraznawaz2005/BloggerCMS/issues
-  [14]: https://github.com/camspiers/json-pretty
-  [15]: http://parsedown.org/
-  [16]: https://mustache.github.io/
-  [17]: http://www.slimframework.com/
-  [18]: https://github.com/sarfraznawaz2005/BloggerCMS/graphs/contributors
+  [14]: https://load.payoneer.com/LoadToPage.aspx
+  [15]: https://github.com/sarfraznawaz2005/BloggerCMS/graphs/contributors
