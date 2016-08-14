@@ -66,26 +66,6 @@
                                     </div>
                                 </div>
 
-                                <!--
-                                <div class="row">
-                                    <div class="form-group col-lg-4">
-                                        <label for="number_posts">Number of Posts</label>
-                                        <input type="number" id="number_posts" name="number_posts" class="form-control" value="<?php //echo $data['number_posts'] ?: '10' ?>">
-
-                                        <p class="help-block">Number of blog posts to show on homepage.</p>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group col-lg-4">
-                                        <input type="checkbox" id="only_titles" name="only_titles" <?php //echo $data['only_titles'] === 'true' ? 'checked' : ''; ?>>
-                                        <label for="only_titles">Display Post Titles Only</label>
-
-                                        <p class="help-block">This will show only post titles on homepage.</p>
-                                    </div>
-                                </div>
-                                -->
-
                                 <div class="row">
                                     <div class="form-group col-lg-4">
                                         <label for="layout">Layout Name</label>
@@ -217,7 +197,7 @@
 
                             <br/>
                             <button class="btn btn-primary" data-toggle="modal" data-target="#custommodal">
-                                <i class="fa fa-plus-circle"></i> Add Todo Item
+                                <i class="fa fa-plus-circle"></i> Add Custom Value
                             </button>
 
                             <hr/>
