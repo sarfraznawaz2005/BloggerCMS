@@ -71,7 +71,7 @@ $app->hook(
        $setting = new \BloggerCMS\Setting();
 
        $app->view()->setData('app', $app); // we can now use $app in views
-       $app->view()->setData('root', dirname($_SERVER['SCRIPT_NAME']));
+       $app->view()->setData('root', ltrim(dirname($_SERVER['SCRIPT_NAME']), '\\'));
        $app->view()->setData('layoutsDir', dirname(__FILE__) . '/layouts/');
        $app->view()->setData('dateFormat', $config['dateFormat']);
        $app->view()->setData('blogURL', $setting->getBlogURL());
